@@ -1,0 +1,27 @@
+# Conda / Installers
+Mambaforge.sh
+Miniforge3.sh
+miniforge3/
+mambaforge/
+
+# Output / temp
+outputs/
+tmp/
+cache/
+timer.dat
+
+# Cluster
+aslurm_logs/
+*.out
+*.err
+
+# Large files
+*.tar.gz
+*.pt
+*.pth
+*.ckpt
+
+# Python
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
