@@ -83,10 +83,14 @@ class NoiseDistribution:
         )
         self.limit_dist = utils.PlaceHolder(X=x_limit, E=e_limit, y=y_limit)
 
+        
+
     def update_input_output_dims(self, input_dims):
+        #print("DEBUG update_input_output_dims BEFORE:", input_dims)
         input_dims["X"] += self.x_added_classes
         input_dims["E"] += self.e_added_classes
         input_dims["y"] += self.y_added_classes
+        #print("DEBUG update_input_output_dims AFTER:", input_dims)
 
     def update_dataset_infos(self, dataset_infos):
         if hasattr(dataset_infos, "atom_decoder"):
@@ -101,7 +105,7 @@ class NoiseDistribution:
         return {
             "X": len(self.limit_dist.X),
             "E": len(self.limit_dist.E),
-            "y": len(self.limit_dist.E),
+            "y": len(self.limit_dist.y),
         }
 
     def ignore_virtual_classes(self, X, E, y=None):

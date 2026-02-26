@@ -328,7 +328,13 @@ def main(cfg: DictConfig):
             extra_features=extra_features,
             domain_features=domain_features,
         )
-
+        force_cond = getattr(cfg.general, "condition_values", None)
+        print("force_cond:", force_cond)
+        print("Initial output_dims:", dataset_infos.output_dims)
+        # TODO: gerade noch ein bisschen undynamisch hier +1 durch dynamische abfrage ersätzen wird gerade nicht funktionieren für eine cond var
+        dataset_infos.output_dims["y"] = dataset_infos.output_dims["y"] + 2 if force_cond is not None else dataset_infos.output_dims["y"]
+        print("after output_dims:", dataset_infos.output_dims)
+       
         train_metrics = TrainMolecularMetricsDiscrete(dataset_infos)
 
         # We do not evaluate novelty during training

@@ -51,13 +51,11 @@ class GraphDiscreteFlowModel(pl.LightningModule):
 
         self.input_dims = dataset_infos.input_dims
         self.output_dims = dataset_infos.output_dims
-        self.output_dims["y"] = self.forced_conditions.size(0) if self.forced_conditions is not None else self.output_dims["y"]
+        #print("output dims in discrete:", self.output_dims)
         
         self.dataset_info = dataset_infos
         
         self.node_dist = dataset_infos.nodes_dist
-        print("max num nodes: ", len(self.node_dist.prob) - 1)
-        print("min num nodes: ", torch.where(self.node_dist.prob > 0)[0][0].item())
 
         self.train_metrics = train_metrics
         self.sampling_metrics = sampling_metrics
@@ -162,7 +160,7 @@ class GraphDiscreteFlowModel(pl.LightningModule):
             true_E=E,
             log=i % self.log_every_steps == 0,
         )
-
+        
         return {"loss": loss}
 
     def configure_optimizers(self):
@@ -590,6 +588,8 @@ class GraphDiscreteFlowModel(pl.LightningModule):
         z_T = flow_matching_utils.sample_discrete_feature_noise(
             limit_dist=self.noise_dist.get_limit_dist(), node_mask=node_mask
         )
+        #("bev z_T.y :", z_T.y)
+        
         if self.conditional:
             if ("qm9" in self.cfg.dataset.name or "zinc_det" in self.cfg.dataset.name):
                 # If forced_conditions provided, use them for every sample in the batch
@@ -606,6 +606,7 @@ class GraphDiscreteFlowModel(pl.LightningModule):
                     cond = cond.repeat(batch_size, 1)[:batch_size]
                     #print("Condition before processing:", cond)
                     z_T.y = cond
+                    #print("after z_T.y :", z_T.y)
                 else:
                     print("Using NO forced conditions for sampling.-------------------------------------------")
                     y = self.test_labels
@@ -708,10 +709,7 @@ class GraphDiscreteFlowModel(pl.LightningModule):
             edge_types = E[i, :n, :n].cpu()
             molecule_list.append([atom_types, edge_types])
             label_list.append(y[i].cpu())
-        print("n_nodes stats:",
-        n_nodes.min().item(),
-        n_nodes.max().item(),
-        (n_nodes > 0).sum().item())
+        #print("n_nodes stats:",n_nodes.min().item(),n_nodes.max().item(),(n_nodes > 0).sum().item())
         
         valid = 0  
         for atom_types, edge_types in molecule_list:
@@ -818,6 +816,25 @@ class GraphDiscreteFlowModel(pl.LightningModule):
 
         extra_data = self.compute_extra_data(noisy_data)
         pred = self.forward(noisy_data, extra_data, node_mask)
+        
+        t = pred.y.detach().cpu()  # sicherstellen, dass kein Grad bleibt und auf CPU
+        if t.ndim == 1:
+            # [N]
+            out = ", ".join(f"{v:.2f}" for v in t)
+        elif t.ndim == 2:
+            if t.size(1) == 1:
+                # [N,1] -> flatten
+                out = ", ".join(f"{v:.2f}" for v in t.flatten())
+            else:
+                    # [N,2] oder mehr -> jede Zeile als [a,b]
+                out = ", ".join(
+                    "[" + ", ".join(f"{v:.2f}" for v in row) + "]"
+                    for row in t
+                )
+        else:
+            out = str(t)  # für andere Fälle einfach raw print
+        #print(f"pred_y: {out}")
+        
         # Normalize predictions
         pred_X = F.softmax(pred.X, dim=-1)  # bs, n, d0
         pred_E = F.softmax(pred.E, dim=-1)  # bs, n, n, d0
@@ -826,7 +843,8 @@ class GraphDiscreteFlowModel(pl.LightningModule):
 
         G_1_pred = pred_X, pred_E
         G_t = X_t, E_t
-
+        
+        #print(f"G_t shapes: {X_t.shape}, {E_t.shape}")
         R_t_X, R_t_E = self.rate_matrix_designer.compute_graph_rate_matrix(
             t,
             node_mask,
@@ -839,6 +857,7 @@ class GraphDiscreteFlowModel(pl.LightningModule):
         if self.conditional:
             uncond_y = torch.ones_like(y_t, device=self.device) * -1
             noisy_data["y_t"] = uncond_y
+            
             
             extra_data = self.compute_extra_data(noisy_data)
             pred = self.forward(noisy_data, extra_data, node_mask)
@@ -856,11 +875,7 @@ class GraphDiscreteFlowModel(pl.LightningModule):
                     "pred_E diff:",
                     (pred_E_cond - pred_E).abs().mean().item()
                 )
-                kl_X = self.kl_div(pred_X_cond, pred_X).mean()
-                kl_E = self.kl_div(pred_E_cond, pred_E).mean()
-
-                print("KL X:", kl_X.item())
-                print("KL E:", kl_E.item())
+              
 
             
             R_t_X_uncond, R_t_E_uncond = (
@@ -894,10 +909,6 @@ class GraphDiscreteFlowModel(pl.LightningModule):
         )
         entropy = -(prob_X * torch.log(prob_X + 1e-8)).sum(-1).mean()
         if print_value:
-            print("delta before guidance:", delta_before.item())
-            print("delta after guidance:", delta_after.item())
-            print("entropy:", entropy.item())
-
             print("s[0]:", s[0])
 
         if s[0] == 1.0:
@@ -1035,8 +1046,21 @@ class GraphDiscreteFlowModel(pl.LightningModule):
                 res = self.evaluate_samples(
                     samples=samples, labels=labels, is_test=True
                 )
-                mean_res = {f"{key}_mean": res[key][0] for key in res}
-                std_res = {f"{key}_std": res[key][1] for key in res}
+                print(f"res: {res}")
+                mean_res = {}
+                std_res = {}
+                for key, value in res.items():
+                    if isinstance(value, tuple) and len(value) == 2:
+                        mean_res[f"{key}_mean"] = value[0]
+                        std_res[f"{key}_std"] = value[1]
+                if (
+                    "cond_results" in res
+                    and isinstance(res["cond_results"], list)
+                    and len(res["cond_results"]) > 0
+                ):
+                    cond_dict = res["cond_results"][0]
+                    for k, v in cond_dict.items():
+                        mean_res[k] = v
                 mean_res.update(std_res)
                 res_df = pd.DataFrame([mean_res])
                 res_df["num_step"] = num_step
@@ -1077,8 +1101,21 @@ class GraphDiscreteFlowModel(pl.LightningModule):
                 res = self.evaluate_samples(
                     samples=samples, labels=labels, is_test=True
                 )
-                mean_res = {f"{key}_mean": res[key][0] for key in res}
-                std_res = {f"{key}_std": res[key][1] for key in res}
+                print(f"res: {res}")
+                mean_res = {}
+                std_res = {}
+                for key, value in res.items():
+                    if isinstance(value, tuple) and len(value) == 2:
+                        mean_res[f"{key}_mean"] = value[0]
+                        std_res[f"{key}_std"] = value[1]
+                if (
+                    "cond_results" in res
+                    and isinstance(res["cond_results"], list)
+                    and len(res["cond_results"]) > 0
+                ):
+                    cond_dict = res["cond_results"][0]
+                    for k, v in cond_dict.items():
+                        mean_res[k] = v
                 mean_res.update(std_res)
                 res_df = pd.DataFrame([mean_res])
                 res_df["num_step"] = num_step
@@ -1132,8 +1169,23 @@ class GraphDiscreteFlowModel(pl.LightningModule):
                 res = self.evaluate_samples(
                     samples=samples, labels=labels, is_test=True
                 )
-                mean_res = {f"{key}_mean": res[key][0] for key in res}
-                std_res = {f"{key}_std": res[key][1] for key in res}
+                print(f"res: {res}")
+                mean_res = {}
+                std_res = {}
+
+                for key, value in res.items():
+                    if isinstance(value, tuple) and len(value) == 2:
+                        mean_res[f"{key}_mean"] = value[0]
+                        std_res[f"{key}_std"] = value[1]
+                if (
+                    "cond_results" in res
+                    and isinstance(res["cond_results"], list)
+                    and len(res["cond_results"]) > 0
+                ):
+                    cond_dict = res["cond_results"][0]
+                    for k, v in cond_dict.items():
+                        mean_res[k] = v
+
                 mean_res.update(std_res)
                 res_df = pd.DataFrame([mean_res])
                 res_df["num_step"] = num_step

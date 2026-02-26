@@ -9,6 +9,7 @@ from torchmetrics import Metric, MeanSquaredError, MetricCollection
 from metrics.abstract_metrics import (
     CrossEntropyMetric,
     KLDMetric,
+    MeanSquaredErrorMetric,
 )
 
 
@@ -34,7 +35,8 @@ class TrainLossDiscrete(nn.Module):
         else:
             self.node_loss = KLDMetric()
             self.edge_loss = KLDMetric()
-        self.y_loss = CrossEntropyMetric()
+        #self.y_loss = CrossEntropyMetric()
+        self.y_loss = MeanSquaredErrorMetric()
 
     def forward(
         self,
@@ -76,13 +78,36 @@ class TrainLossDiscrete(nn.Module):
         loss_X = self.node_loss(flat_pred_X, flat_true_X) if true_X.numel() > 0 else 0.0
         loss_E = self.edge_loss(flat_pred_E, flat_true_E) if true_E.numel() > 0 else 0.0
         loss_y = self.y_loss(pred_y, true_y) if pred_y.numel() > 0 else 0.0
-        #print(f"true_y: {true_y}")
-        #print(f"pred_y: {pred_y}")
-        #if loss_y == 0.0:
-        #    print("Warning: loss_y is zero!")
-        #    print(f"pred_y.numel(): {pred_y.numel()}")
-        #    print(f"true_y: {true_y}")
-        #    print(f"pred_y: {pred_y}")'
+        
+        bool_debug = False
+        
+        if bool_debug:
+            flat_true = true_y.detach().cpu().tolist()
+
+            print(
+                "true_y:",
+                ", ".join(
+                    "[" + ", ".join(f"{v:.2f}" for v in row) + "]"
+                    if isinstance(row, (list, tuple))
+                    else f"[{row:.2f}]"
+                    for row in flat_true
+                )
+            )
+            flat_pred = pred_y.detach().cpu().tolist()
+
+            print(
+                "pred_y:",
+                ", ".join(
+                    "[" + ", ".join(f"{v:.2f}" for v in row) + "]"
+                    if isinstance(row, (list, tuple))
+                    else f"[{row:.2f}]"
+                    for row in flat_pred
+                )
+            )
+            print(f"loss_y: {loss_y}")
+            if loss_y == 0.0:
+                print("Warning: loss_y is zero!")
+                print(f"pred_y.numel(): {pred_y.numel()}")
         if log:
             to_log = {
                 "train_loss/batch_CE": (loss_X + loss_E + loss_y).detach(),
@@ -110,7 +135,7 @@ class TrainLossDiscrete(nn.Module):
             self.edge_loss.compute() if self.edge_loss.total_samples > 0 else -1
         )
         epoch_y_loss = (
-            self.y_loss.compute() if self.y_loss.total_samples > 0 else -1
+            self.y_loss.compute() if hasattr(self.y_loss, 'total_samples') and self.y_loss.total_samples > 0 else -1
         )
 
         to_log = {

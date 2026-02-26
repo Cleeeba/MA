@@ -210,7 +210,7 @@ class BasicMolecularMetrics(object):
                 mols_logp.append(logp_val)
                 mols_num_atoms.append(num_atoms)
                 true_properties.append(input_properties[i])
-                print(f"Sample {i}: logP={logp_val}, num_atoms={num_atoms}, true_properties={input_properties[i]}")
+                #print(f"Sample {i}: logP={logp_val}, num_atoms={num_atoms}, true_properties={input_properties[i]}")
             
             # Zu Tensoren konvertieren
             true_properties = torch.stack(true_properties)  # shape: (N, num_properties)

@@ -81,6 +81,7 @@ class SelectDynamicZincTransform:
 
         self.keys = keys
         self.indices = [self.TARGET_MAP[k] for k in keys]
+        print(f"SelectDynamicZincTransform initialized with targets: {self.keys} at indices {self.indices}")
 
     def __call__(self, data, return_y=False):
         """

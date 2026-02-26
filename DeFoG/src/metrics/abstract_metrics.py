@@ -106,7 +106,34 @@ class CrossEntropyMetric(Metric):
     def compute(self):
         return self.total_ce / self.total_samples
 
+import torch
+from torchmetrics import Metric
+import torch.nn.functional as F
 
+class MeanSquaredErrorMetric(Metric):
+    def __init__(self):
+        super().__init__()
+        self.add_state("total_mse", default=torch.tensor(0.0), dist_reduce_fx="sum")
+        self.add_state("total_samples", default=torch.tensor(0.0), dist_reduce_fx="sum")
+
+    def update(self, preds: torch.Tensor, target: torch.Tensor, weight: torch.Tensor = None):
+        if weight is not None:
+            # Weighted MSE
+            output = F.mse_loss(preds, target, reduction="none")
+            if output.dim() > 1:
+                output = output.mean(dim=-1)  # mean over features
+            output = (output * weight).sum()
+            self.total_mse += output
+            self.total_samples += weight.sum()
+        else:
+            # Unweighted MSE
+            output = F.mse_loss(preds, target, reduction="sum")
+            self.total_mse += output
+            self.total_samples += target.numel()
+
+    def compute(self):
+        return self.total_mse / self.total_samples if self.total_samples > 0 else torch.tensor(0.0)
+        
 class KLDMetric(Metric):
     def __init__(self):
         super().__init__()

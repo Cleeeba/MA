@@ -89,6 +89,9 @@ def sample_discrete_features(probX, probE, node_mask, mask=False):
         X_t = X_t * node_mask
         E_t = E_t * node_mask.unsqueeze(1) * node_mask.unsqueeze(2)
 
+    # Debug prints to inspect sampled labels and probability tensor shapes
+
+
     return PlaceHolder(X=X_t, E=E_t, y=torch.zeros(bs, 0).type_as(X_t))
 
 

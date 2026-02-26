@@ -36,7 +36,9 @@ class RateMatrixDesigner:
         )
         X_1_sampled = sampled_G_1.X
         E_1_sampled = sampled_G_1.E
-
+        
+        #print(f"X_1_pred shape: {X_1_pred.shape}")
+        #print(f"X_1_sampled shape: {X_1_sampled.shape}")
         dfm_variables = self.compute_dfm_variables(
             t, X_t_label, E_t_label, X_1_sampled, E_1_sampled
         )
@@ -69,7 +71,7 @@ class RateMatrixDesigner:
 
         # Stabilize rate matrices
         R_t_X, R_t_E = self.stabilize_rate_matrix(R_t_X, R_t_E, dfm_variables)
-
+        
         return R_t_X, R_t_E
 
     def compute_dfm_variables(self, t, X_t_label, E_t_label, X_1_sampled, E_1_sampled):
@@ -108,7 +110,7 @@ class RateMatrixDesigner:
             "Z_t_X": Z_t_X,
             "Z_t_E": Z_t_E,
         }
-
+        #print("dfm_variables:", dfm_variables)
         return dfm_variables
 
     def compute_Rstar(self, dfm_variables):
