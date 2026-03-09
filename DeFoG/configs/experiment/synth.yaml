@@ -1,8 +1,8 @@
 # @package _global_
 general:
-    name : 'zinc_det'
+    name : 'synth'
     gpus : 1
-    wandb: 'online'
+    wandb: 'offline'
     remove_h: True
     resume: null
     test_only: null
@@ -14,7 +14,7 @@ general:
     chains_to_save: 5
     log_every_steps: 50
     conditional: True
-    target: 'num_atoms,logp'
+    #target: 'num_atoms,logp'
     dynamic: False
     guidance_weight: 0.9
     final_model_samples_to_generate: 5000

@@ -242,7 +242,7 @@ def main(cfg: DictConfig):
         )
 
 
-    elif dataset_config["name"] in ["qm9", "guacamol", "moses", "zinc","zinc_det", "aqsoldb"]:
+    elif dataset_config["name"] in ["qm9", "guacamol", "moses", "zinc","zinc_det", "aqsoldb", "synth"]:
         from metrics.molecular_metrics import (
             TrainMolecularMetrics,
             SamplingMolecularMetrics,
@@ -291,7 +291,18 @@ def main(cfg: DictConfig):
                 datamodule=datamodule,
                 dataset_infos=dataset_infos,
                 evaluate_datasets=False,
-            )    
+            )   
+        elif "synth" in dataset_config["name"]:
+            from datasets import synth_dataset
+
+            datamodule = synth_dataset.SynthDataModule(cfg)
+            dataset_infos = synth_dataset.SynthInfos(datamodule=datamodule, cfg=cfg)
+            dataset_smiles = synth_dataset.get_smiles(
+                cfg=cfg,
+                datamodule=datamodule,
+                dataset_infos=dataset_infos,
+                evaluate_datasets=False,
+            )     
         elif "zinc" in dataset_config["name"]:
             from datasets import zinc_dataset
 
@@ -330,11 +341,12 @@ def main(cfg: DictConfig):
         )
         force_cond = getattr(cfg.general, "condition_values", None)
         print("force_cond:", force_cond)
+        
+
+        if force_cond:
+            dataset_infos.output_dims["y"] += len(force_cond)
+        print("force_cond:", force_cond)
         print("Initial output_dims:", dataset_infos.output_dims)
-        # TODO: gerade noch ein bisschen undynamisch hier +1 durch dynamische abfrage ersätzen wird gerade nicht funktionieren für eine cond var
-        dataset_infos.output_dims["y"] = dataset_infos.output_dims["y"] + 2 if force_cond is not None else dataset_infos.output_dims["y"]
-        print("after output_dims:", dataset_infos.output_dims)
-       
         train_metrics = TrainMolecularMetricsDiscrete(dataset_infos)
 
         # We do not evaluate novelty during training
@@ -393,7 +405,7 @@ def main(cfg: DictConfig):
         "domain_features": domain_features,
         "test_labels": (
             datamodule.test_labels
-            if (("qm9" in cfg.dataset.name or "zinc_det" in cfg.dataset.name) and cfg.general.conditional)
+            if (("qm9" in cfg.dataset.name or "zinc_det" in cfg.dataset.name or "synth" in cfg.dataset.name) and cfg.general.conditional)
             else None
         ),
     }

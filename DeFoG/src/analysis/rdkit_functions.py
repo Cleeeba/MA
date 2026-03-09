@@ -7,6 +7,7 @@ import pandas as pd
 from tqdm import tqdm
 from torchmetrics import MeanSquaredError, MeanAbsoluteError
 from rdkit.Chem import Crippen
+from rdkit.Chem import QED
 
 try:
     from rdkit import Chem
@@ -184,6 +185,7 @@ class BasicMolecularMetrics(object):
         if self.args.dataset.name == "zinc_det":
             """Optimierte Version für logP und Anzahl Atome"""
             mols_logp = []
+            mols_qed = []
             mols_num_atoms = []
             true_properties = []
            
@@ -206,8 +208,12 @@ class BasicMolecularMetrics(object):
                 # 2. Anzahl Atome zählen (trivial)
                 num_atoms = mol.GetNumAtoms()
                 
+                #3. QED berechnen (RDKit, schnell)
+                qed_val = QED.qed(mol)
+                
                 # Speichern
                 mols_logp.append(logp_val)
+                mols_qed.append(qed_val)
                 mols_num_atoms.append(num_atoms)
                 true_properties.append(input_properties[i])
                 #print(f"Sample {i}: logP={logp_val}, num_atoms={num_atoms}, true_properties={input_properties[i]}")
@@ -216,6 +222,7 @@ class BasicMolecularMetrics(object):
             true_properties = torch.stack(true_properties)  # shape: (N, num_properties)
 
             mols_logp = torch.FloatTensor(mols_logp)
+            mols_qed = torch.FloatTensor(mols_qed)
             mols_num_atoms = torch.FloatTensor(mols_num_atoms)
             
             # MAE für jedes Target berechnen
@@ -230,17 +237,32 @@ class BasicMolecularMetrics(object):
                         break
                 
                 keys = [k.strip() for k in self.args.general.target.split(separator) if k.strip()]
-                
-                for key in keys:
+
+                for idx, key in enumerate(keys):
+
                     if key == "logp":
-                        mae_logp = self.cond_val(mols_logp.unsqueeze(1), true_properties[:, 1].unsqueeze(1))
+                        mae_logp = self.cond_val(
+                            mols_logp.unsqueeze(1),
+                            true_properties[:, idx].unsqueeze(1)
+                        )
                         cond_results["logp_mae"] = mae_logp.item()
-                        print(f"logP MAE: {mae_logp}")
-                    
+                        cond_results["logp_mean"] = mols_logp.mean().item()
+
                     elif key == "num_atoms":
-                        mae_num_atoms = self.cond_val(mols_num_atoms.unsqueeze(1), true_properties[:, 0].unsqueeze(1))
+                        mae_num_atoms = self.cond_val(
+                            mols_num_atoms.unsqueeze(1),
+                            true_properties[:, idx].unsqueeze(1)
+                        )
                         cond_results["num_atoms_mae"] = mae_num_atoms.item()
-                        print(f"num_atoms MAE: {mae_num_atoms}")
+                        cond_results["num_atoms_mean"] = mols_num_atoms.mean().item()
+
+                    elif key == "qed":
+                        mae_qed = self.cond_val(
+                            mols_qed.unsqueeze(1),
+                            true_properties[:, idx].unsqueeze(1)
+                        )
+                        cond_results["qed_mae"] = mae_qed.item()
+                        cond_results["qed_mean"] = mols_qed.mean().item()
             
             num_valid = len(mols_logp)
             validity_rate = num_valid / len(samples) if len(samples) > 0 else 0
@@ -435,6 +457,7 @@ class BasicMolecularMetrics(object):
                     true_properties,
                 )
                 cond_results = {"logp_mae": mae.item()}
+                cond_results["logp_mean"] = logp.mean().item()
                 print("Conditional generation logp metric:")
                 print(f"MAE: {mae}")
             if "num_atoms" in keys:
@@ -445,7 +468,20 @@ class BasicMolecularMetrics(object):
                     true_properties,
                 )
                 cond_results = {"num_atoms_mae": mae.item()}
+                cond_results["num_atoms_mean"] = num_atoms.mean().item()
                 print("Conditional generation num_atoms metric:")
+                print(f"MAE: {mae}")
+            if "qed" in keys:
+                Chem.SanitizeMol(mol)
+                qed = [QED.qed(build_molecule(atom_types, edge_types, self.dataset_info.atom_decoder)) for atom_types, edge_types in generated]
+                qed = torch.FloatTensor(qed)
+                mae = self.cond_val(
+                    qed.unsqueeze(1),
+                    true_properties,
+                )
+                cond_results = {"qed_mae": mae.item()}
+                cond_results["qed_mean"] = qed.mean().item()
+                print("Conditional generation QED metric:")
                 print(f"MAE: {mae}")
         else:
             print("Conditional generation metric:")

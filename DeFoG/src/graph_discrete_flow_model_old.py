@@ -498,13 +498,31 @@ class GraphDiscreteFlowModel(pl.LightningModule):
             limit_dist=self.noise_dist.get_limit_dist(), node_mask=node_mask
         )
         if self.conditional:
-            if "qm9" in self.cfg.dataset.name:
-                y = self.test_labels
-                perm = torch.randperm(y.size(0))
-                idx = perm[:100]
-                condition = y[idx]
-                condition = condition.to(self.device)
-                z_T.y = condition.repeat([10, 1])[:batch_size, :]
+            if ("qm9" in self.cfg.dataset.name or "zinc_det" in self.cfg.dataset.name):
+                # If forced_conditions provided, use them for every sample in the batch
+                if getattr(self, "forced_conditions", None) is not None:
+                    print("Using forced conditions for sampling.-------------------------------------------")
+                    cond = self.forced_conditions
+                    
+                    if not torch.is_tensor(cond):
+                        cond = torch.tensor(cond, dtype=torch.float)
+                    cond = cond.to(self.device)
+                    # ensure shape is (batch_size, K)
+                    if cond.dim() == 1:
+                        cond = cond.unsqueeze(0)
+                    cond = cond.repeat(batch_size, 1)[:batch_size]
+                    #print("Condition before processing:", cond)
+                    z_T.y = cond
+                    #print("after z_T.y :", z_T.y)
+                else:
+                    print("Using NO forced conditions for sampling.-------------------------------------------")
+                    y = self.test_labels
+                    perm = torch.randperm(y.size(0))
+                    #idx = perm[:100]
+                    idx = perm[:batch_size]
+                    condition = y[idx]
+                    condition = condition.to(self.device)
+                    z_T.y = condition
             elif "tls" in self.cfg.dataset.name:
                 z_T.y = torch.zeros(batch_size, 1).to(self.device)
                 z_T.y[: batch_size // 2] = 1
@@ -751,9 +769,12 @@ class GraphDiscreteFlowModel(pl.LightningModule):
 
         assert (E_s == torch.transpose(E_s, 1, 2)).all()
         assert (X_t.shape == X_s.shape) and (E_t.shape == E_s.shape)
+        if self.conditional:
+        y_to_save = y_t  # ← speichert die fixed condition
 
         if self.conditional:
-            y_to_save = y_t
+            # Use model predictions instead of input condition to avoid exposure bias
+            y_to_save = pred.y if hasattr(pred, 'y') and pred.y is not None else y_t
         else:
             y_to_save = torch.zeros([y_t.shape[0], 0], device=self.device)
 

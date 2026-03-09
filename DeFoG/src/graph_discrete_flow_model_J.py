@@ -51,11 +51,13 @@ class GraphDiscreteFlowModel(pl.LightningModule):
 
         self.input_dims = dataset_infos.input_dims
         self.output_dims = dataset_infos.output_dims
-        #print("output dims in discrete:", self.output_dims)
+        self.output_dims["y"] = self.forced_conditions.size(0) if self.forced_conditions is not None else self.output_dims["y"]
         
         self.dataset_info = dataset_infos
         
         self.node_dist = dataset_infos.nodes_dist
+        print("max num nodes: ", len(self.node_dist.prob) - 1)
+        print("min num nodes: ", torch.where(self.node_dist.prob > 0)[0][0].item())
 
         self.train_metrics = train_metrics
         self.sampling_metrics = sampling_metrics
@@ -73,6 +75,7 @@ class GraphDiscreteFlowModel(pl.LightningModule):
 
         self.train_loss = TrainLossDiscrete(
             self.cfg.model.lambda_train,
+            y_loss_type=getattr(self.cfg.model, "y_loss_type", "ce"),
         )
 
         self.model = GraphTransformer(
@@ -124,8 +127,14 @@ class GraphDiscreteFlowModel(pl.LightningModule):
             self.print("Found a batch with no edges. Skipping.")
             return
 
+        # Save original y before conditional dropout for use as loss target
+        original_y = data.y.clone()
+        y_dropout_active = False
+
         if self.conditional:
-            if torch.rand(1) < 0.1: data.y = torch.ones_like(data.y, device=self.device) * -1
+            if torch.rand(1) < 0.1:
+                data.y = torch.ones_like(data.y, device=self.device) * -100
+                y_dropout_active = True
 
         dense_data, node_mask = utils.to_dense(
             data.x,
@@ -134,35 +143,20 @@ class GraphDiscreteFlowModel(pl.LightningModule):
             data.batch,
         )
 
-        #print("data.y:", data.y)
-       
         dense_data = dense_data.mask(node_mask)
         X, E = dense_data.X, dense_data.E
         noisy_data = self.apply_noise(X, E, data.y, node_mask)
         extra_data = self.compute_extra_data(noisy_data)
-        noisy_data["y_t"] = data.y
         pred = self.forward(noisy_data, extra_data, node_mask)
-        #print("pred :",pred )
-        
-        # --- prediction flatten ---
-        pred_y = pred.y.detach().reshape(-1).cpu()
-
-        # --- target flatten ---
-        true_y = noisy_data["y_t"].detach().reshape(-1).cpu()
-
-        pred_str = ", ".join(f"{v:.2f}" for v in pred_y)
-        true_str = ", ".join(f"{v:.2f}" for v in true_y)
-
-        #print(f"training pred.y: {pred_str}")
-        #print(f"true y: {true_str}")
-        
+        # Skip y loss when conditional dropout is active: the model received
+        # the unconditional token (-100) so it cannot predict the real properties.
         loss = self.train_loss(
             masked_pred_X=pred.X,
             masked_pred_E=pred.E,
-            pred_y=pred.y,
+            pred_y=pred.y if not y_dropout_active else pred.y.new_empty(0),
             true_X=X,
             true_E=E,
-            true_y=data.y,
+            true_y=original_y if not y_dropout_active else original_y.new_empty(0),
             log=i % self.log_every_steps == 0,
         )
 
@@ -173,7 +167,7 @@ class GraphDiscreteFlowModel(pl.LightningModule):
             true_E=E,
             log=i % self.log_every_steps == 0,
         )
-        
+
         return {"loss": loss}
 
     def configure_optimizers(self):
@@ -204,10 +198,11 @@ class GraphDiscreteFlowModel(pl.LightningModule):
     def on_train_epoch_end(self) -> None:
         to_log = self.train_loss.log_epoch_metrics()
         #print("DEBUG to_log:", to_log)
+        y_loss_type = getattr(self.cfg.model, "y_loss_type", "ce").upper()
         self.print(
             f"Epoch {self.current_epoch}: X_CE: {to_log['train_epoch/x_CE'] :.3f}"
             f" -- E_CE: {to_log['train_epoch/E_CE'] :.3f} --"
-            f" y_CE: {to_log['train_epoch/y_CE'] :.3f}"
+            f" y_{y_loss_type}: {to_log[f'train_epoch/y_{y_loss_type}'] :.3f}"
             f" -- {time.time() - self.start_epoch_time:.1f}s "
         )
         epoch_at_metrics, epoch_bond_metrics = self.train_metrics.log_epoch_metrics()
@@ -552,25 +547,8 @@ class GraphDiscreteFlowModel(pl.LightningModule):
         
         # --- Concatenate edge features along feature dimension ---
         E = torch.cat((noisy_data["E_t"], extra_data.E), dim=-1).float()
-        #print(noisy_data["y_t"].shape)
-        #print(extra_data.y.shape)
-        y_t = noisy_data["y_t"]
-        extra_y = extra_data.y
-
-        batch_size = noisy_data["X_t"].shape[0]
-
-        # Fix extra_data.y batch mismatch
-        if extra_y.shape[0] != batch_size:
-            extra_y = extra_y.expand(batch_size, -1)
-
-        # Handle empty conditional case
-        if y_t.numel() == 0:
-            y = extra_y.float()
-        else:
-            if y_t.shape[0] != batch_size:
-                y_t = y_t.expand(batch_size, -1)
-            y = torch.hstack((y_t, extra_y)).float()
-        #y = torch.hstack((noisy_data["y_t"], extra_data.y)).float()
+        
+        y = torch.hstack((noisy_data["y_t"], extra_data.y)).float()
         #print("Merged conditional y :", y)
         # --- Feed into the transformer model ---
         # The transformer already handles the correct input size; no mlp_in_y needed
@@ -618,10 +596,8 @@ class GraphDiscreteFlowModel(pl.LightningModule):
         z_T = flow_matching_utils.sample_discrete_feature_noise(
             limit_dist=self.noise_dist.get_limit_dist(), node_mask=node_mask
         )
-        #("bev z_T.y :", z_T.y)
-        
         if self.conditional:
-            if ("qm9" in self.cfg.dataset.name or "zinc_det" in self.cfg.dataset.name or "synth" in self.cfg.dataset.name):
+            if ("qm9" in self.cfg.dataset.name or "zinc_det" in self.cfg.dataset.name):
                 # If forced_conditions provided, use them for every sample in the batch
                 if getattr(self, "forced_conditions", None) is not None:
                     print("Using forced conditions for sampling.-------------------------------------------")
@@ -636,7 +612,6 @@ class GraphDiscreteFlowModel(pl.LightningModule):
                     cond = cond.repeat(batch_size, 1)[:batch_size]
                     #print("Condition before processing:", cond)
                     z_T.y = cond
-                    #print("after z_T.y :", z_T.y)
                 else:
                     print("Using NO forced conditions for sampling.-------------------------------------------")
                     y = self.test_labels
@@ -652,11 +627,7 @@ class GraphDiscreteFlowModel(pl.LightningModule):
             else:
                 raise NotImplementedError
         X, E, y = z_T.X, z_T.E, z_T.y
-        # --- Fix label batch mismatch ---
-        batch_size = X.shape[0]
 
-        if y.shape[0] != batch_size:
-            y = y.expand(batch_size, -1)
         # Init chain storing variables
         assert (E == torch.transpose(E, 1, 2)).all()
         chain_X_size = torch.Size((number_chain_steps + 1, keep_chain, X.size(1)))
@@ -717,7 +688,7 @@ class GraphDiscreteFlowModel(pl.LightningModule):
         # Sample
         sampled_s = sampled_s.mask(node_mask, collapse=True)
         X, E, y = sampled_s.X, sampled_s.E, sampled_s.y
-        #print("Sampled y:", y)
+
         # Prepare the chain for saving
         if keep_chain > 0:
 
@@ -743,7 +714,10 @@ class GraphDiscreteFlowModel(pl.LightningModule):
             edge_types = E[i, :n, :n].cpu()
             molecule_list.append([atom_types, edge_types])
             label_list.append(y[i].cpu())
-        #print("n_nodes stats:",n_nodes.min().item(),n_nodes.max().item(),(n_nodes > 0).sum().item())
+        print("n_nodes stats:",
+        n_nodes.min().item(),
+        n_nodes.max().item(),
+        (n_nodes > 0).sum().item())
         
         valid = 0  
         for atom_types, edge_types in molecule_list:
@@ -838,8 +812,7 @@ class GraphDiscreteFlowModel(pl.LightningModule):
         bs, n, dx = X_t.shape
         _, _, _, de = E_t.shape
         dt = (s - t)[0]
-        
-        #noisy_data_fix = self.apply_noise(X_t, E_t, y_t, node_mask)
+
         # Neural net predictions
         noisy_data = {
             "X_t": X_t,
@@ -848,49 +821,9 @@ class GraphDiscreteFlowModel(pl.LightningModule):
             "t": t,
             "node_mask": node_mask,
         }
-        y_temp = y_t.detach().cpu()
-        if y_temp.ndim == 1:
-            out_y = ", ".join(f"{v:.2f}" for v in y_temp)
 
-        elif y_temp.ndim == 2:
-            if y_temp.size(1) == 1:
-                out_y = ", ".join(f"{v:.2f}" for v in y_temp.flatten())
-            else:
-                out_y = ", ".join(
-                    "[" + ", ".join(f"{v:.2f}" for v in row) + "]"
-                    for row in y_temp
-                )
-        else:
-            out_y = str(y_temp)
-
-        #print(f"input_y: {out_y}")
-       
         extra_data = self.compute_extra_data(noisy_data)
-       
-        if noisy_data["y_t"].shape[1] == 0:
-            noisy_data["y_t"] = torch.zeros(extra_data.y.shape[0], 0, device=extra_data.y.device)
-        #print("extra_data:",extra_data)
-        #print("noisy_data:", noisy_data)
         pred = self.forward(noisy_data, extra_data, node_mask)
-        #print("sample pred.y:", pred.y)
-        t_temp = pred.y.detach().cpu()  # sicherstellen, dass kein Grad bleibt und auf CPU
-        if t_temp.ndim == 1:
-            # [N]
-            out = ", ".join(f"{v:.2f}" for v in t_temp)
-        elif t_temp.ndim == 2:
-            if t_temp.size(1) == 1:
-                # [N,1] -> flatten
-                out = ", ".join(f"{v:.2f}" for v in t_temp.flatten())
-            else:
-                    # [N,2] oder mehr -> jede Zeile als [a,b]
-                out = ", ".join(
-                    "[" + ", ".join(f"{v:.2f}" for v in row) + "]"
-                    for row in t_temp
-                )
-        else:
-            out = str(t_temp)  # für andere Fälle einfach raw print
-        #print(f"pred_y: {out}")
-        
         # Normalize predictions
         pred_X = F.softmax(pred.X, dim=-1)  # bs, n, d0
         pred_E = F.softmax(pred.E, dim=-1)  # bs, n, n, d0
@@ -899,8 +832,7 @@ class GraphDiscreteFlowModel(pl.LightningModule):
 
         G_1_pred = pred_X, pred_E
         G_t = X_t, E_t
-        
-        #print(f"G_t shapes: {X_t.shape}, {E_t.shape}")
+
         R_t_X, R_t_E = self.rate_matrix_designer.compute_graph_rate_matrix(
             t,
             node_mask,
@@ -911,9 +843,8 @@ class GraphDiscreteFlowModel(pl.LightningModule):
         pred_X_cond = pred_X
         
         if self.conditional:
-            uncond_y = torch.ones_like(y_t, device=self.device) * -1
+            uncond_y = torch.ones_like(y_t, device=self.device) * -100
             noisy_data["y_t"] = uncond_y
-            
             
             extra_data = self.compute_extra_data(noisy_data)
             pred = self.forward(noisy_data, extra_data, node_mask)
@@ -931,15 +862,20 @@ class GraphDiscreteFlowModel(pl.LightningModule):
                     "pred_E diff:",
                     (pred_E_cond - pred_E).abs().mean().item()
                 )
-              
+                kl_X = self.kl_div(pred_X_cond, pred_X).mean()
+                kl_E = self.kl_div(pred_E_cond, pred_E).mean()
+
+                print("KL X:", kl_X.item())
+                print("KL E:", kl_E.item())
 
             
+            G_1_pred_uncond = (pred_X, pred_E)
             R_t_X_uncond, R_t_E_uncond = (
                 self.rate_matrix_designer.compute_graph_rate_matrix(
                     t,
                     node_mask,
                     G_t,
-                    G_1_pred,
+                    G_1_pred_uncond,
                 )
             )
             guidance_weight = self.cfg.general.guidance_weight
@@ -965,10 +901,18 @@ class GraphDiscreteFlowModel(pl.LightningModule):
         )
         entropy = -(prob_X * torch.log(prob_X + 1e-8)).sum(-1).mean()
         if print_value:
+            print("delta before guidance:", delta_before.item())
+            print("delta after guidance:", delta_after.item())
+            print("entropy:", entropy.item())
+
             print("s[0]:", s[0])
 
         if s[0] == 1.0:
-            prob_X, prob_E = pred_X, pred_E
+            if self.conditional:
+                # Use conditional predictions for the final step
+                prob_X, prob_E = pred_X_cond, pred_E_cond
+            else:
+                prob_X, prob_E = pred_X, pred_E
 
         sampled_s = flow_matching_utils.sample_discrete_features(
             prob_X, prob_E, node_mask=node_mask
@@ -1059,8 +1003,8 @@ class GraphDiscreteFlowModel(pl.LightningModule):
         num_step_list = [5, 10, 50, 100, 1000]
         if self.cfg.dataset.name == "qm9":
             num_step_list = [1, 5, 10, 50, 100, 500]
-        if self.cfg.dataset.name in ["guacamol", 'moses', 'zinc', 'zinc_det', 'synth']:  # accelerate
-            num_step_list = [1, 5, 10, 50]
+        if self.cfg.dataset.name in ["guacamol", 'moses', 'zinc']:  # accelerate
+            num_step_list = [50]
 
         if self.cfg.sample.search == "all":
             results_df = self.search_distortion(num_step_list)
@@ -1102,21 +1046,8 @@ class GraphDiscreteFlowModel(pl.LightningModule):
                 res = self.evaluate_samples(
                     samples=samples, labels=labels, is_test=True
                 )
-                print(f"res: {res}")
-                mean_res = {}
-                std_res = {}
-                for key, value in res.items():
-                    if isinstance(value, tuple) and len(value) == 2:
-                        mean_res[f"{key}_mean"] = value[0]
-                        std_res[f"{key}_std"] = value[1]
-                if (
-                    "cond_results" in res
-                    and isinstance(res["cond_results"], list)
-                    and len(res["cond_results"]) > 0
-                ):
-                    cond_dict = res["cond_results"][0]
-                    for k, v in cond_dict.items():
-                        mean_res[k] = v
+                mean_res = {f"{key}_mean": res[key][0] for key in res}
+                std_res = {f"{key}_std": res[key][1] for key in res}
                 mean_res.update(std_res)
                 res_df = pd.DataFrame([mean_res])
                 res_df["num_step"] = num_step
@@ -1157,21 +1088,8 @@ class GraphDiscreteFlowModel(pl.LightningModule):
                 res = self.evaluate_samples(
                     samples=samples, labels=labels, is_test=True
                 )
-                print(f"res: {res}")
-                mean_res = {}
-                std_res = {}
-                for key, value in res.items():
-                    if isinstance(value, tuple) and len(value) == 2:
-                        mean_res[f"{key}_mean"] = value[0]
-                        std_res[f"{key}_std"] = value[1]
-                if (
-                    "cond_results" in res
-                    and isinstance(res["cond_results"], list)
-                    and len(res["cond_results"]) > 0
-                ):
-                    cond_dict = res["cond_results"][0]
-                    for k, v in cond_dict.items():
-                        mean_res[k] = v
+                mean_res = {f"{key}_mean": res[key][0] for key in res}
+                std_res = {f"{key}_std": res[key][1] for key in res}
                 mean_res.update(std_res)
                 res_df = pd.DataFrame([mean_res])
                 res_df["num_step"] = num_step
@@ -1225,23 +1143,8 @@ class GraphDiscreteFlowModel(pl.LightningModule):
                 res = self.evaluate_samples(
                     samples=samples, labels=labels, is_test=True
                 )
-                print(f"res: {res}")
-                mean_res = {}
-                std_res = {}
-
-                for key, value in res.items():
-                    if isinstance(value, tuple) and len(value) == 2:
-                        mean_res[f"{key}_mean"] = value[0]
-                        std_res[f"{key}_std"] = value[1]
-                if (
-                    "cond_results" in res
-                    and isinstance(res["cond_results"], list)
-                    and len(res["cond_results"]) > 0
-                ):
-                    cond_dict = res["cond_results"][0]
-                    for k, v in cond_dict.items():
-                        mean_res[k] = v
-
+                mean_res = {f"{key}_mean": res[key][0] for key in res}
+                std_res = {f"{key}_std": res[key][1] for key in res}
                 mean_res.update(std_res)
                 res_df = pd.DataFrame([mean_res])
                 res_df["num_step"] = num_step

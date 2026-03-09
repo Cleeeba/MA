@@ -11,7 +11,7 @@ def p_xt_g_x1(X1, E1, t, limit_dist):
 
     # Debug prints to inspect shapes and category counts
  
-  
+    #t_time = t.squeeze(-1)[:, None, None]
     # Stelle sicher, dass t_time immer [B,1,1] ist, egal was t enthält
     if t.ndim > 1 and t.size(-1) > 1:
         # z.B. t enthält [num_atoms, logp], dann nur den ersten Wert nehmen

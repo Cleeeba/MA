@@ -825,7 +825,8 @@ class GraphDiscreteFlowModel(pl.LightningModule):
         assert (X_t.shape == X_s.shape) and (E_t.shape == E_s.shape)
 
         if self.conditional:
-            y_to_save = y_t
+            # Use model predictions instead of input condition to avoid exposure bias
+            y_to_save = pred.y if hasattr(pred, 'y') and pred.y is not None else y_t
         else:
             y_to_save = torch.zeros([y_t.shape[0], 0], device=self.device)
 

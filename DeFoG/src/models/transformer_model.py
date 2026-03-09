@@ -264,8 +264,8 @@ class GraphTransformer(nn.Module):
         self.out_dim_E = output_dims["E"]
         self.out_dim_y = output_dims["y"]
         self.output_dims = output_dims
-        #print(f"DEBUG: output_dims: {self.output_dims}")
-        #print(f"DEBUG: output_dims['y']: {self.output_dims['y']}")
+        print(f"DEBUG: output_dims: {self.output_dims}")
+        print(f"DEBUG: output_dims['y']: {self.output_dims['y']}")
         self.mlp_in_X = nn.Sequential(
             nn.Linear(input_dims["X"], hidden_mlp_dims["X"]),
             act_fn_in,
