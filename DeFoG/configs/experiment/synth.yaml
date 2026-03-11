@@ -13,16 +13,20 @@ general:
     samples_to_save: 20
     chains_to_save: 5
     log_every_steps: 50
-    conditional: True
-    #target: 'num_atoms,logp'
-    dynamic: False
+    #explain configs/conditioning
+    conditional: False
+    target: 'label,dist_ch0_cl0,dist_ch0_cl1,dist_ch0_cl2,dist_ch0_cl3,dist_ch1_cl4,dist_ch1_cl5,dist_ch1_cl6,dist_ch1_cl7,dist_ch1_cl8'
+    condition_values: [-1,7.1373634,5.1315193,3.766304,4.138136,87.38281,87.62372,86.88048,86.74916,86.72613]
+    dynamic: True
     guidance_weight: 0.9
+    
+
     final_model_samples_to_generate: 5000
     final_model_samples_to_save: 50
     final_model_chains_to_save: 20
 train:
     optimizer: adamw
-    n_epochs: 50
+    n_epochs: 100
     batch_size: 256
     save_model: True
     lr: 2e-4
@@ -45,3 +49,9 @@ model:
 
     # The dimensions should satisfy dx % n_head == 0
     hidden_dims: { 'dx': 256, 'de': 64, 'dy': 128, 'n_head': 8, 'dim_ffX': 256, 'dim_ffE': 128, 'dim_ffy': 256}
+encoder:
+    latent_dim: 16        # gewünschte reduzierte Dimension
+    hidden_dims: [512, 128] # optionale versteckte Layer
+    lr: 0.001
+    batch_size: 64
+    epochs: 50

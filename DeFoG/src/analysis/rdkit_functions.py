@@ -175,18 +175,42 @@ class BasicMolecularMetrics(object):
                 except Chem.rdchem.KekulizeException:
                     print("Can't kekulize molecule")
         return valid, len(valid) / len(generated)
+    def detect_oh(self,mol: Chem.Mol) -> list[tuple[int, ...]]:
+        """Return all OH-group matches in *mol* using a generic SMARTS pattern."""
 
+        # Chem.MolFromSmarts() parses a SMARTS string into a query molecule —
+        # think of it as "compiling" the pattern so RDKit can use it for matching.
+        pattern = Chem.MolFromSmarts("[OX2H]")
+
+        # GetSubstructMatches() searches the molecule for all occurrences of the
+        # pattern. It returns a tuple of tuples — each inner tuple holds the atom
+        # indices that matched. For a single-atom pattern like [OX2H], each match
+        # is a 1-element tuple, e.g. ((4,), (7,)) means atoms 4 and 7 are OH groups.
+        return list(mol.GetSubstructMatches(pattern))
+
+
+    def detect_nh2(self,mol: Chem.Mol) -> list[tuple[int, ...]]:
+        """Return all NH2-group matches in *mol* using a generic SMARTS pattern."""
+
+        # Same idea as above, but now we look for primary-amine nitrogens.
+        # [NX3H2]: nitrogen, 3 connections (2 H + 1 bond to rest of molecule),
+        # exactly 2 hydrogens.
+        pattern = Chem.MolFromSmarts("[NX3H2]")
+        return list(mol.GetSubstructMatches(pattern))
+    
     def cond_sample_metric(self, samples, input_properties):
         mols_dipoles = []
         mols_homo = []
         self.num_valid_molecules = 0
         self.num_total = 0
         print("self.args.dataset:", self.args.dataset)
-        if self.args.dataset.name == "zinc_det":
+        if self.args.dataset.name == "zinc_det" or self.args.dataset.name == "synth":
             """Optimierte Version für logP und Anzahl Atome"""
             mols_logp = []
             mols_qed = []
             mols_num_atoms = []
+            mols_nh2 = []
+            mols_oh = []
             true_properties = []
            
             # Hardware für logP-Berechnung (kein PSI4 nötig)
@@ -202,24 +226,32 @@ class BasicMolecularMetrics(object):
                     print("Invalid chemistry")
                     continue
                 
-                # 1. logP berechnen (RDKit, sehr schnell)
-                logp_val = compute_logp(mol)  # Ihre existierende Funktion
                 
-                # 2. Anzahl Atome zählen (trivial)
+                logp_val = compute_logp(mol)  
+                
                 num_atoms = mol.GetNumAtoms()
                 
-                #3. QED berechnen (RDKit, schnell)
                 qed_val = QED.qed(mol)
+                
+                matches = self.detect_nh2(mol)
+                mols_nh2.append(len(matches))
+                matches = self.detect_oh(mol)
+                mols_oh.append(len(matches))
                 
                 # Speichern
                 mols_logp.append(logp_val)
                 mols_qed.append(qed_val)
                 mols_num_atoms.append(num_atoms)
                 true_properties.append(input_properties[i])
+             
                 #print(f"Sample {i}: logP={logp_val}, num_atoms={num_atoms}, true_properties={input_properties[i]}")
             
             # Zu Tensoren konvertieren
-            true_properties = torch.stack(true_properties)  # shape: (N, num_properties)
+            if len(true_properties) == 0:
+                print("Warning: No valid molecules to compute conditional metrics")
+                return None, 0.0, {}
+            true_properties = torch.stack(true_properties)
+            
 
             mols_logp = torch.FloatTensor(mols_logp)
             mols_qed = torch.FloatTensor(mols_qed)
@@ -263,6 +295,13 @@ class BasicMolecularMetrics(object):
                         )
                         cond_results["qed_mae"] = mae_qed.item()
                         cond_results["qed_mean"] = mols_qed.mean().item()
+                    elif key == "label":
+                        oh_percentage = (torch.FloatTensor(mols_oh) > 0).float().mean().item() * 100
+                        nh2_percentage = (torch.FloatTensor(mols_nh2) > 0).float().mean().item() * 100
+                        cond_results["oh_percentage"] = oh_percentage
+                        cond_results["nh2_percentage"] = nh2_percentage
+                        
+                       
             
             num_valid = len(mols_logp)
             validity_rate = num_valid / len(samples) if len(samples) > 0 else 0
@@ -433,7 +472,7 @@ class BasicMolecularMetrics(object):
                 # input_properties.repeat(len(mols_dipoles), 1).cpu()
                 true_properties,
             )
-        if self.args.general.dynamic and self.args.dataset == "zinc_det":
+        if self.args.general.dynamic and (self.args.dataset == "zinc_det" or self.args.dataset == "synth"):
             dynamic = self.args.general.target    
             separators = [' ', ',', ';', ':', '|']
             
