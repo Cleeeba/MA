@@ -485,14 +485,12 @@ def main(cfg: DictConfig):
     else:
         # --- MANUAL CHECKPOINT LOADING ---
         if cfg.general.test_only:
-            print(f"Loading checkpoint manually (bypassing Lightning strict unpickler): {cfg.general.test_only}")
+            print(f"Loading checkpoint manually: {cfg.general.test_only}")
 
             try:
-                # Attempt to load checkpoint with weights_only=False (for full Lightning checkpoints)
                 raw_ckpt = torch.load(cfg.general.test_only, map_location="cpu", weights_only=False)
                 print("Checkpoint loaded. Type:", type(raw_ckpt))
 
-                # Determine if it's a full Lightning checkpoint or plain state_dict
                 if isinstance(raw_ckpt, dict) and "state_dict" in raw_ckpt:
                     state_dict = raw_ckpt["state_dict"]
                 elif isinstance(raw_ckpt, dict):
@@ -500,22 +498,28 @@ def main(cfg: DictConfig):
                 else:
                     raise ValueError(f"Unknown checkpoint format: {type(raw_ckpt)}")
 
-                # Load state_dict into model, ignore mismatched layers
                 missing_keys, unexpected_keys = model.load_state_dict(state_dict, strict=False)
                 print("Checkpoint loaded successfully.")
-                if missing_keys or unexpected_keys:
-                    print("Warning: Some keys were missing or unexpected when loading checkpoint:")
-                    if missing_keys:
-                        print("  Missing keys:", missing_keys)
-                    if unexpected_keys:
-                        print("  Unexpected keys:", unexpected_keys)
-
+                
             except Exception as e:
                 print(f"Failed to load checkpoint {cfg.general.test_only}: {repr(e)}")
                 raise e
-
-            # Run testing
-            trainer.test(model, datamodule=datamodule, ckpt_path=None)
+            
+            # Basis-Trainer ohne DDP
+            test_trainer = Trainer(
+                accelerator='gpu' if torch.cuda.is_available() else 'cpu',
+                devices=1 if torch.cuda.is_available() else None,
+                strategy='auto',
+                logger=False,  # Oder trainer.logger falls gewünscht
+                enable_checkpointing=False,
+                num_sanity_val_steps=0,
+            )
+            
+            # Modell auf Test-Modus setzen
+            model.eval()
+            
+            # Test ausführen
+            test_trainer.test(model, datamodule=datamodule, ckpt_path=None)
 
 if __name__ == "__main__":
     main()

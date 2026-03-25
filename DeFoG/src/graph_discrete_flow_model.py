@@ -121,12 +121,29 @@ class GraphDiscreteFlowModel(pl.LightningModule):
 
     def training_step(self, data, i):
         if data.edge_index.numel() == 0:
-            self.print("Found a batch with no edges. Skipping.")
+            print("Found a batch with no edges. Skipping.")
             return
 
         if self.conditional:
-            if torch.rand(1) < 0.1: data.y = torch.ones_like(data.y, device=self.device) * -1
+            r = torch.rand(1).item()  
 
+            if r < 0.1:
+                data.y = torch.ones_like(data.y, device=self.device) * -100
+
+            elif r < 0.2:
+             
+                data.y[:, 0] = -100
+
+            elif r < 0.3:
+                if data.y.shape[1] > 1:
+                    keep_col = torch.randint(
+                        1, data.y.shape[1], (1,), device=self.device
+                    ).item()
+
+                    y_backup = data.y.clone()
+
+                    data.y[:] = -100
+                    data.y[:, keep_col] = y_backup[:, keep_col]
         dense_data, node_mask = utils.to_dense(
             data.x,
             data.edge_index,
@@ -134,7 +151,7 @@ class GraphDiscreteFlowModel(pl.LightningModule):
             data.batch,
         )
 
-        #print("data.y:", data.y)
+        print("data.y:", data.y)
        
         dense_data = dense_data.mask(node_mask)
         X, E = dense_data.X, dense_data.E
@@ -186,7 +203,7 @@ class GraphDiscreteFlowModel(pl.LightningModule):
 
     def on_fit_start(self) -> None:
         self.train_iterations = len(self.trainer.datamodule.train_dataloader())
-        self.print(
+        print(
             "Size of the input features",
             self.input_dims["X"],
             self.input_dims["E"],
@@ -196,7 +213,7 @@ class GraphDiscreteFlowModel(pl.LightningModule):
             utils.setup_wandb(self.cfg)
 
     def on_train_epoch_start(self) -> None:
-        self.print("Starting train epoch...")
+        print("Starting train epoch...")
         self.start_epoch_time = time.time()
         self.train_loss.reset()
         self.train_metrics.reset()
@@ -204,14 +221,14 @@ class GraphDiscreteFlowModel(pl.LightningModule):
     def on_train_epoch_end(self) -> None:
         to_log = self.train_loss.log_epoch_metrics()
         #print("DEBUG to_log:", to_log)
-        self.print(
+        print(
             f"Epoch {self.current_epoch}: X_CE: {to_log['train_epoch/x_CE'] :.3f}"
             f" -- E_CE: {to_log['train_epoch/E_CE'] :.3f} --"
             f" y_CE: {to_log['train_epoch/y_CE'] :.3f}"
             f" -- {time.time() - self.start_epoch_time:.1f}s "
         )
         epoch_at_metrics, epoch_bond_metrics = self.train_metrics.log_epoch_metrics()
-        self.print(
+        print(
             f"Epoch {self.current_epoch}: {epoch_at_metrics} -- {epoch_bond_metrics}"
         )
         if wandb.run:
@@ -244,10 +261,10 @@ class GraphDiscreteFlowModel(pl.LightningModule):
                 for key, value in to_log.items():
                     file.write(f"{key}: {value}\n")
 
-        self.print("Finished validation.")
+        print("Finished validation.")
 
     def on_test_epoch_start(self) -> None:
-        self.print("Starting test...")
+        print("Starting test...")
         self.sampling_metrics.reset()
         if self.local_rank == 0:
             utils.setup_wandb(self.cfg)
@@ -278,13 +295,13 @@ class GraphDiscreteFlowModel(pl.LightningModule):
                 for key, value in to_log.items():
                     file.write(f"{key}: {value}\n")
 
-            self.print("Finished testing.")
+            print("Finished testing.")
 
     def sample(self, is_test, save_samples, save_visualization):
 
         # Load generated samples if they exist
         if self.cfg.general.generated_path:
-            self.print("Loading generated samples...")
+            print("Loading generated samples...")
             with open(self.cfg.general.generated_path, "rb") as f:
                 samples = pickle.load(f)
             # Set labels to None
@@ -314,7 +331,7 @@ class GraphDiscreteFlowModel(pl.LightningModule):
         labels = []
         graph_id = 0
         while samples_left_to_generate > 0:
-            self.print(
+            print(
                 f"Samples left to generate: {samples_left_to_generate}/"
                 f"{samples_to_generate}",
                 end="",
@@ -343,7 +360,7 @@ class GraphDiscreteFlowModel(pl.LightningModule):
             chains_left_to_save -= chains_save
 
         if save_samples:
-            self.print("Saving the generated graphs")
+            print("Saving the generated graphs")
 
             # saving in txt version
             filename = "graphs.txt"
@@ -367,7 +384,7 @@ class GraphDiscreteFlowModel(pl.LightningModule):
                 pickle.dump(samples, f)
 
             print("Generated graphs saved.")
-        print("labels stats:",labels)
+        # print("labels stats:",labels)
         return samples, labels
 
     def evaluate_samples(
@@ -758,7 +775,7 @@ class GraphDiscreteFlowModel(pl.LightningModule):
         
         if self.visualization_tools is not None and save_visualization:
             # Visualize chains
-            self.print("Visualizing chains...")
+            print("Visualizing chains...")
             current_path = os.getcwd()
             num_molecules = chain_X.size(1)  # number of molecules
             for i in range(num_molecules):
@@ -776,10 +793,10 @@ class GraphDiscreteFlowModel(pl.LightningModule):
                         chain_E[:, i, :].numpy(),
                         chain_times[:, i].numpy(),
                     )
-                self.print(
+                print(
                     "\r{}/{} complete".format(i + 1, num_molecules), end="", flush=True
                 )
-            self.print("\nVisualizing graphs...")
+            print("\nVisualizing graphs...")
 
             # Visualize the final molecules
             current_path = os.getcwd()
@@ -788,7 +805,7 @@ class GraphDiscreteFlowModel(pl.LightningModule):
                 f"graphs/{self.cfg.general.name}/epoch{self.current_epoch}_b{batch_id}/",
             )
             self.visualization_tools.visualize(result_path, molecule_list, save_final)
-            self.print("Done.")
+            print("Done.")
 
         return molecule_list, label_list
 
@@ -911,7 +928,7 @@ class GraphDiscreteFlowModel(pl.LightningModule):
         pred_X_cond = pred_X
         
         if self.conditional:
-            uncond_y = torch.ones_like(y_t, device=self.device) * -1
+            uncond_y = torch.ones_like(y_t, device=self.device) * -100
             noisy_data["y_t"] = uncond_y
             
             
