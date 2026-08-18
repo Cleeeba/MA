@@ -1,0 +1,482 @@
+Found rdkit, all good
+
+================================================================================
+                             CONFIGURATION SUMMARY                              
+================================================================================
+
+[GENERAL SETTINGS]
+  Experiment name:        synth
+  Wandb mode:             offline
+  GPUs:                   1
+  Seed:                   0
+  Test only:              /hkfs/work/workspace_haic/scratch/rx3495-workspace_C/outputs/2026-04-15/12-13-54-dkoi-synth2-synth/checkpoints/synth/epoch95.ckpt
+  Resume from:            None
+
+[DATASET SETTINGS]
+  Dataset name:           synth2
+  Data directory:         data/synth2/
+  Batch size:             256
+  Num workers:            4
+
+[TRAINING SETTINGS]
+  Number of epochs:       100
+  Learning rate:          0.0002
+  Optimizer:              adamw
+  Weight decay:           1e-12
+  Gradient clipping:      None
+  EMA decay:              0
+  Time distortion:        polydec
+  Save model:             True
+
+[MODEL SETTINGS]
+  Model type:             graph_tf
+  Transition:             marginal
+  Number of layers:       12
+  Hidden dims:            {'dx': 256, 'de': 64, 'dy': 128, 'n_head': 8, 'dim_ffX': 256, 'dim_ffE': 128, 'dim_ffy': 256}
+  Hidden MLP dims:        {'X': 256, 'E': 128, 'y': 256}
+  Extra features:         rrwp
+  RRWP steps:             20
+  Lambda train [E, y]:    [5, 0]
+
+[SAMPLING SETTINGS]
+  Eta:                    0.0
+  Omega:                  0.0
+  Sample steps:           1000
+  Time distortion:        polydec
+  Search mode:            False
+  RDB type:               general
+
+[VALIDATION SETTINGS]
+  Check val every:        4 epochs
+  Sample every val:       2
+  Samples to generate:    256
+  Samples to save:        20
+  Chains to save:         5
+
+[CONDITIONAL GENERATION]
+  Conditional:            True
+  Target:                 label,dist_ch0_cl0,dist_ch0_cl1,dist_ch1_cl2,dist_ch1_cl3
+  Guidance weight:        0.8
+
+================================================================================
+
+Found rdkit, all good
+PSI4 not found
+Found rdkit, all good
+PSI4 not found
+SelectDynamicTransform initialized with targets: ['label', 'dist_ch0_cl0', 'dist_ch0_cl1', 'dist_ch1_cl2', 'dist_ch1_cl3'] at indices [0, 1, 2, 3, 4]
+Test labels shape: torch.Size([1472, 5])
+Selected target(s): ['label', 'dist_ch0_cl0', 'dist_ch0_cl1', 'dist_ch1_cl2', 'dist_ch1_cl3']
+Dataset sizes: train 11783, val 1472, test 1472
+This dataset contains 11783 training graphs, 1472 validation graphs, 1472 test graphs.
+Valency distribution length: 94
+Valency distribution sum: 0.9999999403953552
+Dataset train smiles were found.
+Dataset val smiles were found.
+Dataset test smiles were found.
+force_cond: [1, 0.8041565181280066, 0.7952147835722749, 3.467621412234223e-09, 1.0]
+force_cond: [1, 0.8041565181280066, 0.7952147835722749, 3.467621412234223e-09, 1.0]
+Initial output_dims: {'X': 9, 'E': 4, 'y': 5}
+Loading reference metrics.
+Validation reference metrics: {'Validity': 1.0, 'Relaxed Validity': 1.0, 'Uniqueness': 0.9604514979207333, 'Novelty': 0.0, 'nc_max': 1, 'nc_mu': 1.0, 'cond_mae': -1.0, 'cond_val': -1.0, 'cond_results': {}, 'fcd': -1, 'molecular_metrics/C_dist': -1.2755393981933594e-05, 'molecular_metrics/N_dist': 2.1882355213165283e-05, 'molecular_metrics/O_dist': 1.948326826095581e-06, 'molecular_metrics/F_dist': -3.098323941230774e-05, 'molecular_metrics/P_dist': 4.201068077236414e-05, 'molecular_metrics/S_dist': 1.6026198863983154e-05, 'molecular_metrics/Cl_dist': -3.6088749766349792e-06, 'molecular_metrics/Br_dist': -2.3380853235721588e-05, 'molecular_metrics/I_dist': -1.0987743735313416e-05, 'molecular_metrics/bond_No bond_dist': 5.364418029785156e-07, 'molecular_metrics/bond_Single_dist': -2.384185791015625e-07, 'molecular_metrics/bond_Double_dist': -2.384185791015625e-07, 'molecular_metrics/bond_Triple_dist': -6.2282197177410126e-09, 'molecular_metrics/valency_0_dist': 0.0, 'molecular_metrics/valency_1_dist': -4.275888204574585e-05, 'molecular_metrics/valency_2_dist': 2.4512410163879395e-05, 'molecular_metrics/valency_3_dist': 3.4183263778686523e-05, 'molecular_metrics/valency_4_dist': -3.108382225036621e-05, 'molecular_metrics/valency_5_dist': -9.446870535612106e-06}
+Test reference metrics: {'Validity': 1.0, 'Relaxed Validity': 1.0, 'Uniqueness': 0.9604514979207333, 'Novelty': 0.0, 'nc_max': 1, 'nc_mu': 1.0, 'cond_mae': -1.0, 'cond_val': -1.0, 'cond_results': {}, 'fcd': -1, 'molecular_metrics/C_dist': -1.2755393981933594e-05, 'molecular_metrics/N_dist': 2.1882355213165283e-05, 'molecular_metrics/O_dist': 1.948326826095581e-06, 'molecular_metrics/F_dist': -3.098323941230774e-05, 'molecular_metrics/P_dist': 4.201068077236414e-05, 'molecular_metrics/S_dist': 1.6026198863983154e-05, 'molecular_metrics/Cl_dist': -3.6088749766349792e-06, 'molecular_metrics/Br_dist': -2.3380853235721588e-05, 'molecular_metrics/I_dist': -1.0987743735313416e-05, 'molecular_metrics/bond_No bond_dist': 5.364418029785156e-07, 'molecular_metrics/bond_Single_dist': -2.384185791015625e-07, 'molecular_metrics/bond_Double_dist': -2.384185791015625e-07, 'molecular_metrics/bond_Triple_dist': -6.2282197177410126e-09, 'molecular_metrics/valency_0_dist': 0.0, 'molecular_metrics/valency_1_dist': -4.275888204574585e-05, 'molecular_metrics/valency_2_dist': 2.4512410163879395e-05, 'molecular_metrics/valency_3_dist': 3.4183263778686523e-05, 'molecular_metrics/valency_4_dist': -3.108382225036621e-05, 'molecular_metrics/valency_5_dist': -9.446870535612106e-06}
+Using forced condition values: [1.0, 0.8041565181280066, 0.7952147835722749, 3.467621412234223e-09, 1.0]
+Limit distribution of the classes | Nodes: tensor([0.7749, 0.1133, 0.0623, 0.0085, 0.0010, 0.0210, 0.0140, 0.0042, 0.0008]) | Edges: tensor([8.9411e-01, 7.3804e-02, 3.1231e-02, 8.5294e-04])
+DEBUG: output_dims: {'X': 9, 'E': 4, 'y': 5}
+DEBUG: output_dims['y']: 5
+TimeDistorter: train_distortion=polydec, sample_distortion=polydec
+RateMatrixDesigner: rdb=general, rdb_crit=dummy, eta=0.0, omega=0.0
+Loading checkpoint manually: /hkfs/work/workspace_haic/scratch/rx3495-workspace_C/outputs/2026-04-15/12-13-54-dkoi-synth2-synth/checkpoints/synth/epoch95.ckpt
+Checkpoint loaded. Type: <class 'dict'>
+Checkpoint loaded successfully.
+Starting test...
+Starting to sample
+Samples left to generate: 500/500Using forced conditions for sampling.-------------------------------------------
+RDKit-valid molecules: 0/500
+Visualizing chains...
+Saving /hkfs/work/workspace_haic/scratch/rx3495-workspace_C/outputs/2026-05-04/11-58-28-onza-synth2-synth/chains/synth/epoch0/chains/molecule_0.gif to wandb
+1/20 completeSaving /hkfs/work/workspace_haic/scratch/rx3495-workspace_C/outputs/2026-05-04/11-58-28-onza-synth2-synth/chains/synth/epoch0/chains/molecule_1.gif to wandb
+2/20 completeSaving /hkfs/work/workspace_haic/scratch/rx3495-workspace_C/outputs/2026-05-04/11-58-28-onza-synth2-synth/chains/synth/epoch0/chains/molecule_2.gif to wandb
+3/20 completeSaving /hkfs/work/workspace_haic/scratch/rx3495-workspace_C/outputs/2026-05-04/11-58-28-onza-synth2-synth/chains/synth/epoch0/chains/molecule_3.gif to wandb
+4/20 completeSaving /hkfs/work/workspace_haic/scratch/rx3495-workspace_C/outputs/2026-05-04/11-58-28-onza-synth2-synth/chains/synth/epoch0/chains/molecule_4.gif to wandb
+5/20 completeSaving /hkfs/work/workspace_haic/scratch/rx3495-workspace_C/outputs/2026-05-04/11-58-28-onza-synth2-synth/chains/synth/epoch0/chains/molecule_5.gif to wandb
+6/20 completeSaving /hkfs/work/workspace_haic/scratch/rx3495-workspace_C/outputs/2026-05-04/11-58-28-onza-synth2-synth/chains/synth/epoch0/chains/molecule_6.gif to wandb
+7/20 completeSaving /hkfs/work/workspace_haic/scratch/rx3495-workspace_C/outputs/2026-05-04/11-58-28-onza-synth2-synth/chains/synth/epoch0/chains/molecule_7.gif to wandb
+8/20 completeSaving /hkfs/work/workspace_haic/scratch/rx3495-workspace_C/outputs/2026-05-04/11-58-28-onza-synth2-synth/chains/synth/epoch0/chains/molecule_8.gif to wandb
+9/20 completeSaving /hkfs/work/workspace_haic/scratch/rx3495-workspace_C/outputs/2026-05-04/11-58-28-onza-synth2-synth/chains/synth/epoch0/chains/molecule_9.gif to wandb
+10/20 completeSaving /hkfs/work/workspace_haic/scratch/rx3495-workspace_C/outputs/2026-05-04/11-58-28-onza-synth2-synth/chains/synth/epoch0/chains/molecule_10.gif to wandb
+11/20 completeSaving /hkfs/work/workspace_haic/scratch/rx3495-workspace_C/outputs/2026-05-04/11-58-28-onza-synth2-synth/chains/synth/epoch0/chains/molecule_11.gif to wandb
+12/20 completeSaving /hkfs/work/workspace_haic/scratch/rx3495-workspace_C/outputs/2026-05-04/11-58-28-onza-synth2-synth/chains/synth/epoch0/chains/molecule_12.gif to wandb
+13/20 completeSaving /hkfs/work/workspace_haic/scratch/rx3495-workspace_C/outputs/2026-05-04/11-58-28-onza-synth2-synth/chains/synth/epoch0/chains/molecule_13.gif to wandb
+14/20 completeSaving /hkfs/work/workspace_haic/scratch/rx3495-workspace_C/outputs/2026-05-04/11-58-28-onza-synth2-synth/chains/synth/epoch0/chains/molecule_14.gif to wandb
+15/20 completeSaving /hkfs/work/workspace_haic/scratch/rx3495-workspace_C/outputs/2026-05-04/11-58-28-onza-synth2-synth/chains/synth/epoch0/chains/molecule_15.gif to wandb
+16/20 completeSaving /hkfs/work/workspace_haic/scratch/rx3495-workspace_C/outputs/2026-05-04/11-58-28-onza-synth2-synth/chains/synth/epoch0/chains/molecule_16.gif to wandb
+17/20 completeSaving /hkfs/work/workspace_haic/scratch/rx3495-workspace_C/outputs/2026-05-04/11-58-28-onza-synth2-synth/chains/synth/epoch0/chains/molecule_17.gif to wandb
+18/20 completeSaving /hkfs/work/workspace_haic/scratch/rx3495-workspace_C/outputs/2026-05-04/11-58-28-onza-synth2-synth/chains/synth/epoch0/chains/molecule_18.gif to wandb
+19/20 completeSaving /hkfs/work/workspace_haic/scratch/rx3495-workspace_C/outputs/2026-05-04/11-58-28-onza-synth2-synth/chains/synth/epoch0/chains/molecule_19.gif to wandb
+20/20 complete
+Visualizing graphs...
+Visualizing 50 of 500
+Saving /hkfs/work/workspace_haic/scratch/rx3495-workspace_C/outputs/2026-05-04/11-58-28-onza-synth2-synth/graphs/synth/epoch0_b0/molecule_0.png to wandb
+Saving /hkfs/work/workspace_haic/scratch/rx3495-workspace_C/outputs/2026-05-04/11-58-28-onza-synth2-synth/graphs/synth/epoch0_b0/molecule_1.png to wandb
+Saving /hkfs/work/workspace_haic/scratch/rx3495-workspace_C/outputs/2026-05-04/11-58-28-onza-synth2-synth/graphs/synth/epoch0_b0/molecule_2.png to wandb
+Saving /hkfs/work/workspace_haic/scratch/rx3495-workspace_C/outputs/2026-05-04/11-58-28-onza-synth2-synth/graphs/synth/epoch0_b0/molecule_3.png to wandb
+Saving /hkfs/work/workspace_haic/scratch/rx3495-workspace_C/outputs/2026-05-04/11-58-28-onza-synth2-synth/graphs/synth/epoch0_b0/molecule_4.png to wandb
+Saving /hkfs/work/workspace_haic/scratch/rx3495-workspace_C/outputs/2026-05-04/11-58-28-onza-synth2-synth/graphs/synth/epoch0_b0/molecule_5.png to wandb
+Saving /hkfs/work/workspace_haic/scratch/rx3495-workspace_C/outputs/2026-05-04/11-58-28-onza-synth2-synth/graphs/synth/epoch0_b0/molecule_6.png to wandb
+Saving /hkfs/work/workspace_haic/scratch/rx3495-workspace_C/outputs/2026-05-04/11-58-28-onza-synth2-synth/graphs/synth/epoch0_b0/molecule_7.png to wandb
+Saving /hkfs/work/workspace_haic/scratch/rx3495-workspace_C/outputs/2026-05-04/11-58-28-onza-synth2-synth/graphs/synth/epoch0_b0/molecule_8.png to wandb
+Saving /hkfs/work/workspace_haic/scratch/rx3495-workspace_C/outputs/2026-05-04/11-58-28-onza-synth2-synth/graphs/synth/epoch0_b0/molecule_9.png to wandb
+Saving /hkfs/work/workspace_haic/scratch/rx3495-workspace_C/outputs/2026-05-04/11-58-28-onza-synth2-synth/graphs/synth/epoch0_b0/molecule_10.png to wandb
+Saving /hkfs/work/workspace_haic/scratch/rx3495-workspace_C/outputs/2026-05-04/11-58-28-onza-synth2-synth/graphs/synth/epoch0_b0/molecule_11.png to wandb
+Saving /hkfs/work/workspace_haic/scratch/rx3495-workspace_C/outputs/2026-05-04/11-58-28-onza-synth2-synth/graphs/synth/epoch0_b0/molecule_12.png to wandb
+Saving /hkfs/work/workspace_haic/scratch/rx3495-workspace_C/outputs/2026-05-04/11-58-28-onza-synth2-synth/graphs/synth/epoch0_b0/molecule_13.png to wandb
+Saving /hkfs/work/workspace_haic/scratch/rx3495-workspace_C/outputs/2026-05-04/11-58-28-onza-synth2-synth/graphs/synth/epoch0_b0/molecule_14.png to wandb
+Saving /hkfs/work/workspace_haic/scratch/rx3495-workspace_C/outputs/2026-05-04/11-58-28-onza-synth2-synth/graphs/synth/epoch0_b0/molecule_15.png to wandb
+Saving /hkfs/work/workspace_haic/scratch/rx3495-workspace_C/outputs/2026-05-04/11-58-28-onza-synth2-synth/graphs/synth/epoch0_b0/molecule_16.png to wandb
+Saving /hkfs/work/workspace_haic/scratch/rx3495-workspace_C/outputs/2026-05-04/11-58-28-onza-synth2-synth/graphs/synth/epoch0_b0/molecule_17.png to wandb
+Saving /hkfs/work/workspace_haic/scratch/rx3495-workspace_C/outputs/2026-05-04/11-58-28-onza-synth2-synth/graphs/synth/epoch0_b0/molecule_18.png to wandb
+Saving /hkfs/work/workspace_haic/scratch/rx3495-workspace_C/outputs/2026-05-04/11-58-28-onza-synth2-synth/graphs/synth/epoch0_b0/molecule_19.png to wandb
+Saving /hkfs/work/workspace_haic/scratch/rx3495-workspace_C/outputs/2026-05-04/11-58-28-onza-synth2-synth/graphs/synth/epoch0_b0/molecule_20.png to wandb
+Saving /hkfs/work/workspace_haic/scratch/rx3495-workspace_C/outputs/2026-05-04/11-58-28-onza-synth2-synth/graphs/synth/epoch0_b0/molecule_21.png to wandb
+Saving /hkfs/work/workspace_haic/scratch/rx3495-workspace_C/outputs/2026-05-04/11-58-28-onza-synth2-synth/graphs/synth/epoch0_b0/molecule_22.png to wandb
+Saving /hkfs/work/workspace_haic/scratch/rx3495-workspace_C/outputs/2026-05-04/11-58-28-onza-synth2-synth/graphs/synth/epoch0_b0/molecule_23.png to wandb
+Saving /hkfs/work/workspace_haic/scratch/rx3495-workspace_C/outputs/2026-05-04/11-58-28-onza-synth2-synth/graphs/synth/epoch0_b0/molecule_24.png to wandb
+Saving /hkfs/work/workspace_haic/scratch/rx3495-workspace_C/outputs/2026-05-04/11-58-28-onza-synth2-synth/graphs/synth/epoch0_b0/molecule_25.png to wandb
+Saving /hkfs/work/workspace_haic/scratch/rx3495-workspace_C/outputs/2026-05-04/11-58-28-onza-synth2-synth/graphs/synth/epoch0_b0/molecule_26.png to wandb
+Saving /hkfs/work/workspace_haic/scratch/rx3495-workspace_C/outputs/2026-05-04/11-58-28-onza-synth2-synth/graphs/synth/epoch0_b0/molecule_27.png to wandb
+Saving /hkfs/work/workspace_haic/scratch/rx3495-workspace_C/outputs/2026-05-04/11-58-28-onza-synth2-synth/graphs/synth/epoch0_b0/molecule_28.png to wandb
+Saving /hkfs/work/workspace_haic/scratch/rx3495-workspace_C/outputs/2026-05-04/11-58-28-onza-synth2-synth/graphs/synth/epoch0_b0/molecule_29.png to wandb
+Saving /hkfs/work/workspace_haic/scratch/rx3495-workspace_C/outputs/2026-05-04/11-58-28-onza-synth2-synth/graphs/synth/epoch0_b0/molecule_30.png to wandb
+Saving /hkfs/work/workspace_haic/scratch/rx3495-workspace_C/outputs/2026-05-04/11-58-28-onza-synth2-synth/graphs/synth/epoch0_b0/molecule_31.png to wandb
+Saving /hkfs/work/workspace_haic/scratch/rx3495-workspace_C/outputs/2026-05-04/11-58-28-onza-synth2-synth/graphs/synth/epoch0_b0/molecule_32.png to wandb
+Saving /hkfs/work/workspace_haic/scratch/rx3495-workspace_C/outputs/2026-05-04/11-58-28-onza-synth2-synth/graphs/synth/epoch0_b0/molecule_33.png to wandb
+Saving /hkfs/work/workspace_haic/scratch/rx3495-workspace_C/outputs/2026-05-04/11-58-28-onza-synth2-synth/graphs/synth/epoch0_b0/molecule_34.png to wandb
+Saving /hkfs/work/workspace_haic/scratch/rx3495-workspace_C/outputs/2026-05-04/11-58-28-onza-synth2-synth/graphs/synth/epoch0_b0/molecule_35.png to wandb
+Saving /hkfs/work/workspace_haic/scratch/rx3495-workspace_C/outputs/2026-05-04/11-58-28-onza-synth2-synth/graphs/synth/epoch0_b0/molecule_36.png to wandb
+Saving /hkfs/work/workspace_haic/scratch/rx3495-workspace_C/outputs/2026-05-04/11-58-28-onza-synth2-synth/graphs/synth/epoch0_b0/molecule_37.png to wandb
+Saving /hkfs/work/workspace_haic/scratch/rx3495-workspace_C/outputs/2026-05-04/11-58-28-onza-synth2-synth/graphs/synth/epoch0_b0/molecule_38.png to wandb
+Saving /hkfs/work/workspace_haic/scratch/rx3495-workspace_C/outputs/2026-05-04/11-58-28-onza-synth2-synth/graphs/synth/epoch0_b0/molecule_39.png to wandb
+Saving /hkfs/work/workspace_haic/scratch/rx3495-workspace_C/outputs/2026-05-04/11-58-28-onza-synth2-synth/graphs/synth/epoch0_b0/molecule_40.png to wandb
+Saving /hkfs/work/workspace_haic/scratch/rx3495-workspace_C/outputs/2026-05-04/11-58-28-onza-synth2-synth/graphs/synth/epoch0_b0/molecule_41.png to wandb
+Saving /hkfs/work/workspace_haic/scratch/rx3495-workspace_C/outputs/2026-05-04/11-58-28-onza-synth2-synth/graphs/synth/epoch0_b0/molecule_42.png to wandb
+Saving /hkfs/work/workspace_haic/scratch/rx3495-workspace_C/outputs/2026-05-04/11-58-28-onza-synth2-synth/graphs/synth/epoch0_b0/molecule_43.png to wandb
+Saving /hkfs/work/workspace_haic/scratch/rx3495-workspace_C/outputs/2026-05-04/11-58-28-onza-synth2-synth/graphs/synth/epoch0_b0/molecule_44.png to wandb
+Saving /hkfs/work/workspace_haic/scratch/rx3495-workspace_C/outputs/2026-05-04/11-58-28-onza-synth2-synth/graphs/synth/epoch0_b0/molecule_45.png to wandb
+Saving /hkfs/work/workspace_haic/scratch/rx3495-workspace_C/outputs/2026-05-04/11-58-28-onza-synth2-synth/graphs/synth/epoch0_b0/molecule_46.png to wandb
+Saving /hkfs/work/workspace_haic/scratch/rx3495-workspace_C/outputs/2026-05-04/11-58-28-onza-synth2-synth/graphs/synth/epoch0_b0/molecule_47.png to wandb
+Saving /hkfs/work/workspace_haic/scratch/rx3495-workspace_C/outputs/2026-05-04/11-58-28-onza-synth2-synth/graphs/synth/epoch0_b0/molecule_48.png to wandb
+Saving /hkfs/work/workspace_haic/scratch/rx3495-workspace_C/outputs/2026-05-04/11-58-28-onza-synth2-synth/graphs/synth/epoch0_b0/molecule_49.png to wandb
+Done.
+Saving the generated graphs
+Generated graphs saved.
+Computing sampling metrics...
+All smiles saved
+['CC1CN2C3CC2N2C=C3NC3=C(C1=CC1=CC=CC=CC=13)C2CO(CS)CC#N', 'N#CC#NC123=C4C=C(=C1)C#CC1=CC=C2CCC(C4)C13', 'N#CC1=CC=C(CCC2(C#N)=C3=C2OCC3=CBr)C=CC=CC=C1', 'C#CC(C)C#C.C#CC=CC', 'C1=CC=C1.CCC1CCC(C(C)(C)(C)N2NC2=S)C1', 'CC1=CC2=C(O2)C1=C1(C)NC#CC#CC=C1#Cl', 'CCCC1(C(=S)NC(C)O)=C(NCCC(N)=O)C=CC=CC=C(Cl)C=CC=CC=CC=C1', 'N#CC1=CC2=CC=C3(O)C=C1(C#C2)C3Br.OC1=CC=C1', 'FC1=CC2=CC(Cl)=C3C=CCCC1=COC23', 'CCC1=C2C3=CC=CC(O)=C(CCO)C=C(C)N=C(N)C2N(CCC3)C1', 'CC1=CC(Cl)=C(C(=O)O)C1.ClC#CC1=CC#C1', 'C.N#CC1=CC=CC(Cl)=CO1', 'CCCCC=CF.N#CO', 'CC(CCO)C(F)Cl.COC(C)F.OCCl.S=C1N2CNN12', 'C=CC(O)=NCC(C)CNC', 'C#CC1=CC(OC)=C1OO(CCC)C(C)CCCCC', 'CCC(=O)COCCC(C)C.COC(C)(C)=IC1=CC=C1Cl', 'CC(Br)CO1CC(C)OP1(=S)C1=CC=CC=CC(Br)=CC=C(Br)C=C1', 'CC=CC(C)=C12CC=C34CC5(CC(C)N(=C53)C(=S)N4)C(=[SH]1)OC2.CCF', 'C#CC.CC(C)SCPN=S', 'C1=CC=C1.C=C1C=C(C=C2C#CNC3=CC=C3C(F)C=C2)F1.CCOC', 'ClC(BrC1=C(C2=CC=CC=C2)C=C2C=CC2=C1)=C1(Cl)C=N1', 'C#O.C=C1(CC)C(=CC)C=C2C=CC=C(C)C=CC=C21', 'C1#NCC1.CC#N.CC1=C(C#N)C=CC(F)=C1', 'CC1=CC(C)=C(C#N)C=CC=C1.CNC(C)CC=O.SC1=CC=C1', 'CON=CC(Cl)=C1C=CC=C2C=CC=NN=CC3=CC=C(F)C=C(C=C1)NC2=CC=C3', 'CC(C=N)=Cc1ccc(Cl)c(C)c1Cl', 'BrC1=CC=C2OC2=CC=CC=C1.CC(#N)C#N', 'C.CC1CSC1=CC1=CC1', 'Cc1cc2ccc1C(C)(I)COC2=NCCC#N', 'C1=COC1.C=CC=O', 'C.CC1CC(CC(C)OC=CC(O)Cl)C1.CCCl', 'CO.NN=Cc1nc2ccc1=2.c1ccccc1', 'CC=C(C)CCC(C)(CC(=O)(Br)C(C)C)=C(C#N)C=C(C)C', 'COC(=CC(Br)=CC#CBr)C1=CC=C1C1=NN=C1NC#P', 'COC1=C(Br)C=C(C=CC=C2C=C2C#N)C2=CC=CC(=C1)N=C2C', 'C.N#CC1=C2C=Cc3c(C#N)c(cccccc1c3C1=CC=C1)C(=O)N2', 'CC1=CC=C(SC2=[SH]N2C(=O)=S)C=C1', 'CC.CC123CCOC=CC=CC=CC4=CC(=C41)C(=N)N[PH](=CS2)OC3', 'C=CCC1=CC2=CC=CC=C1(C(=O)C(C)C)C=NCCC2', 'CC=CCC(C)OC=O', 'C=CC=C(C)CC(CCC(C)Cl)C(CS)SC#N.N#CC(N)=S', 'C#CC(CC(C)O)C1=CC1C', 'C1=CCC=C(C2CCCC2)C=C1.CC=CC', 'C#CC#OC(C)(Br)CC', 'CCC#CCCC1CCC1.CCCC=C(C)C(=CC(N#CN)=C(C)C)C1CC1', 'OCC#CCC1C2=C(Br)C3C4(=CC=C(O)C=C4)F13C=C2', 'CC#CC12=N34C#CCC(=C1N(C3)P2(=O)C1=CC=C1Br)C4', 'COC(F)(C#N)=CC=CC=CC=C(O)C1=C2C=CC=CC1=CC=C(Cl)C=C1C=C2C1=O', 'CC1=C(Br)C#CC=C(O)C=C1.CCC(C)=C1CCCCC=CCC1O', 'CCCC#NC1=NC(C#N)=CC=C1C1=C(C#CCl)Cl1', 'CC=C(C1=CC=C(C#N)C=CC#C1C)N1CC1C(C)=NN', 'CC.CC=C12=C3C=C4C=CC(=C1)C=2(C1=CC=C(O)(C#N)C13)C4C', 'CC#CC=CC=C1C=CC=CC(SC)=CC=C1NC#N', 'CC1(C)CC1CC(Cl)(C(=N)N)C1CCO12C1=CC=C2C=C1', 'CC=CC=CC=C(C#N)NC(N)=NC=COC', 'CC1(C)CC=NN=C(SC=CC=CC2=CC=CC=CC=C2Cl)C1.CCOC', 'C#CCC#CC.CC(C)CCC(C)C1CC=CC=CC1', 'C=CC=CC=C(C)C=Nc1ccc(CC(C)=CCNC(C)=CC=NC#N)cc1', 'CC1=CC=C2C=CC=C(C=CC(C)=C1N=C(C#N)C#N)C2.N#CN', 'C=CC(C)C.CC=C1CCC(C)(C)C1', 'C=CC1C(C#N)=CC=CC=CC2=CC=C(C)CN(C)C1=C2', 'C#C(O)OC=CC=C1C=CC=C(O)C=C2C(=CC=C1)C1=CC=C1C1=C2CN1C', 'C.C.CC.CCC(=C(C)C)C(O)(P)Cl.O.O=P(=O)Nc1ccccc1', 'N#CC=C1C(=CC=C(Br)C2=CC=C2)NP(=O)(=S)N1CO', 'CC1=CC=CC(=CC=CC=CN2CCNC2=S)C1.CCC', 'C#C.C1#NCN23CC14=CC=C1(C=C12)C41=NO13', 'COC1=CC=C2C=CC=C3CCC4=CC=C(C=C4)O=C3(=CC=C1)Cl2', 'CI.CO(=CC#N)C1=CC=C2C=C2OC(C=C2C=CC=C2Cl)=C1O', 'C=CC(C)=C1ON1C(C)C=CC=C1CC1', 'P#CC=OC1(=C2=CC2=CC=CC=C(Br)C#P)CNC2(CC2)C1', 'CCC1C(=CC#N)N(P(C)(=O)OC(=O)CC=CC=CSC)CC1C(C)C', 'COC(C)CCCCCC1=NC(=N)N1.ClC1=C(Br)C=C1', 'C1=CC=CC=CC(C2C=NO2)=CC=CC=C1.C=C(C)O.CO.Cl', 'C=CC=CC(Cl)=CO.C=CC=CC=CC=CC.CCC=C(C)N', 'CNC12=C3C4=CC=CC(=C3O1)C=C1C=C(OC)C=C(C(C#N)=C4)N1CC1=CC(=C1)C(=S)S2', 'C#N.CC(O)CF.CC=CC(C)C=C(C)NC(C1=CC=C1)C1=CC=C(F)C=CC=C1', 'CC(CO)CC1=C23=C(C=C4C#CC(=CC=CC=CC=CC41)OCCO2)C3', 'C1=CC=CC=CC=C1.N=CC1=CC=CC=C(Cl)C=C1', 'COCC(Cl)=CC=CC=C1C=CC=CC=N1', 'CCCOC(=O)NC(C)c1cc(C)ccc1C', 'CCC1CCC23CC4CN=C42CC3C1', 'C#C.CC(C)=C1CCCOC(C)CO1', 'Br.N#CCCC#C(#N)C1=CC=CC=C1.NC1=CC2=CC=C12', 'C.CC1=CC2=C(C)C(=C2)N(C(=S)O=CC2=CC=C2)O1', 'C#N.CC1=CC=C2C=C3OC(=C1)CC31=CC=CCC(CCC#CC1)OC(C)CC2', 'C#N.CC#P.Clc1ccc(N=CC2=CC=C2)cc1', 'CC1C#CN=C1.CNc1ccccc1', 'CCCP(#CC1=CC(C)=C1F)[O-][N+]#CO', 'C.CCCC=CC(C)#N.N#CCO', 'C#CCC(=C)C1=C[IH]C=CC=C1CN#C', 'CCC.ClC1CC2=CC=C21.N#CC1=CC(=CC=CC=C2CCC2)C1', 'C#CC=C.O=C1OC1O', 'C1=CC=C1.CC1C2CP12=O.CC=O.Clc1ccccc1Cl', 'CC1=CC=C1C=CC(#N)C1=C(N)C=CC(Cl)=CC=C1', 'CC=C(C=C(Cl)C=CC(O)=CC=CC=C1OC1(O)CC(C)C(C)(=O)O)OC', 'N#CC1=C2CN3=C(=C1)CCOCC=CC(O)=CC=CC=C(Br)C=C23', 'Cc1ccc2cccc(C)c2c1.O', 'F.N#CSC(C#N)=C(F)C=CC=CC(F)(Cl)Br', 'C#CC(C=CC=CC=CC)=CC=C(C#N)C#N.S=CN1=CC1', 'C=C1C=C(C=CC=C2OC3=C(N=CN2C(=N)SC)C(C)BrCCC(C)(C)C3)C1', 'CC1=CC1.CC=C1N=CC(C)O1CC=CCC=C(C)C.O', 'CCCC(C)=O.c1ccc2csc(cc1)[SH]1OC1O2', 'CC(=O)#CC=CC=CC=CC1=CC=CC=C2C(F)=C(Cl)C1C2C1=CC=CC=C1', 'C.CC=c1ccc2cc1ccc2CCCO', 'CC=C(C=CC=C(Cl)C=CBr)NCNP(=S)(OC)OC', 'CCCCCCC(=O)C1=CC=C2CC(C)(CC1C=C(C)CC)O2', 'CC(C#N)=CC=CC=CC#N.ClC1=CC=C1', 'CCN1CCC2=CC=C(C=CC=CC=CC=C2)NC1=S', 'CC1=C(Cl)C=CC=CC=C2C=C1N1#C3CC=CC#C4C(=CC2=CC=C43)C1=CCl', 'CC1=CC=CC=C2CNC(=O)N=C#CC(F)C1=CC=C2CF', 'C1=CC=C1.CC=CC=c1cc2oc1=C2C1(C)OP2CN2CC1CC', 'C#CN(C=C)C(N)=O.Cc1ccccc1', 'C=C1CCN2CC3CC=C1CC3(Cl)C2.OC1(Cl)=CC=CC=C1', 'CO1ClC2=C(F)C(S)=CC1=C2C#CC(=O)=O', 'CCCC#CC1=CC2SCCC=C1C1=N2N1', 'C#CCC1(Br)=C2=CCCOC2C=1(C)C', 'CC(C)=CC=CC1=c2ccccc([nH]c(=O)nc2)=CC=CC(Br)=C1O', 'Cc1ccc(C#CO)c(Cl)c1', 'C=C.CC(C)O.CCC=COC1=CC=CC=CC=C1', 'CC1CCCN2CC(c3ccccc3)C3CCC(C)C(CC2=N3)C1', 'CC1=C2C=C(C(Cl)=CC=C1)P2(#N)=O.COCCC(C)C', 'CC(=N1CCO1)[SH](C)C1=C(O(C)C)C=C1', 'CC1=C2#OCCCC3=C(C=CCC(C)C)N4CC(C3)C(C)NC4(=O)C3=CC=CC2(=C3)NO1', 'CC.FC(Br)C=C1BrBrC(F)CC2=ClC(NN3CC3)=C12', 'C#CC.CC1(C=NO)Cc2cc3ccc4oc(cc(c-4cn2)C1N)C=CC=C3', 'C1=CC=C1.C=CSC(=S)NN1CC1', 'C#CC=CC(C)C1CCCC=CC=C1C', 'CC(F)#CN(C(=O)O)C(O)C(F)Br', 'CC1=CC=C(OC(O)=S)S23=CSC(=C1)C1=CC=CC(=CC=C1)CC1=C=2C3C1', 'C=CC#CC(=C)COCC=N1=C2C=C(=CC)C=CC1=CC=CC#C2C', 'O=C(NCCC1=C(Cl)CCCCCC=C1)OC1=CC=C1Cl', 'C.C.C#N.CC=C12=C=CC(C1)C(=CC=C(C)O)C=CC=C2', 'O=C1OC2CC=CCC3=C(C=C(F)C=C1C=CC=C3)C1=CC=C1F2', 'N#CC=C(C=O)C=CC=CC(F)F', 'C=CC(=CC1=CC(N2C(=O)CC2C)=C(C)C=CC=C1)C1=CC=C1Br', 'N#CC=COC(=S)NC(C=C(Br)C=C1CC1)=NCl', 'C.CC=C1C=C(C(C#O)=NCO)C=CC=C(C=CCC)=N1', 'CCCCc1ccccccccc1C.CCP(=O)(Br)C(C)C', 'C=C(C#N)O1C2=C1C=CC(C)=CC=C2.N#CO', 'CC1#C2C3=CC=C(C=C(F)C1=CC=CF)C2=C3', 'CCCCCOC1CC(C)C(N(CC)C(#N)=OC2=CC#C2)=[SH]1', 'CC=C=OC1CCCCC=C1(F)NCC', 'C=C(Cl)C1=CC(CC(C)CC(O)F)=CC=CC=NCCS1.N#CBr', 'CCC1=CC2=CC3=CC=C(C=CC=CC=C(CC(N)=C3)C(OC)=C1)Br2', 'CC12CC3=CC=CC(=C1C=C3)OCC(N=CNC#N)C2.CC1=CC=C1', 'CC1CC(F)OCCC2C3=C(C=C(F)C4=CC=C4)C12C3', 'CC1=C(N(C)C)C2=C3(C=C(C=C2)C3=N(C)CC234=CC=C2CC3C4)C1C', 'CN1CC2C3=C(C=CC4=C(CC1=N3)SCCO4)C(F)(Cl)C21=CC=C1C#N', 'C#N.CC1=C234CC2CC(Br)C3=C2C=C214', 'CC1=CC=NC2=CC=C(CO)CCCC(C)C=N3N=CC2=CC=C3C=CC=C1', 'OC1=CC=CCC=C1', 'CC(C)OC1=C(C(C)Cl)C=C1.COP(=O)=O', 'C=C.CC1C=CCC1', 'Br.CC=C1C#CCC(=O)NC=C12(Br)C#N2', 'FC1=CC=Cc2ccc3c4c5cc([nH]2)[SH]2C6=COC2(CC(=C1)C=C4)C6=CC=c35', 'C1=CC=C1.CC(C)CC(Cl)CC=CCNC(=O)c1ccccc1.F', 'C#N.FC(Cl)C1=CC=C2C3=C4=C(=C1(C#F)=F=32)C=C4', 'O=C(C#O)C1=CC=CC=C1', 'C1=CCC2CC(=C1)CC1(C=CCC1)C2C=CC=C1C=CCO1', 'CC(N)Cc1cccc(NC#N)c1Br.CC1=CC=C1', 'CC#NC(C)=CC=C(CN(CC=CC)CC1COC1)C1=CC2=CC=C21.N', 'CC(=O)C#N.CC1CC2=CC=C2C(=O)O1C1=CC=CC=C1', 'CC=CC=C1C=C2C(=O)NN=CC12', 'CC#C1CCOC2#NC(C(C)C)C2C1', 'Br.C.CCC(C)=C12C=C3C=CC(OC)(=C4(C#N)C(O)=CC=C14)O21N2=C314N=C24', 'C.C#CC#C.C=CN(C=S)P(=O)=O', 'C1CCOC1.COCc1ccccc1.O=C1CC(=O)NN1', 'C#N.C=C1C(=CC=C(C)C)C2=CC=C=CC12.O', 'C#C.C=C(C(F)Br)C(C)(CC)CCC', 'CC1CC2=CC=C1C=C1C3=CC=C14C15C2=CC1=C54O3', 'C#CCC1(C)(CC(O)C(=CC)CCC)C(CC)C1CC(CC)CC(O)=C(C)CC.O', 'F.NC1=C2C=CC3=CC(Cl)=CC=C4C(=C(C#CCl)N5C2N=C45F3)C1', 'CC1=C(C#N)CC1C.CC=CCOCCC', 'CC=Cc1ccccc(C)ccc(CC=CCCBr)c1', 'CC1=CC=CN2CCCC2C1.N#CCOC1=C(O)(Br)C=C1', 'ClC1=C234C5=C(C=C5Br)N25=C2C(=CC=CC=C1O3I)C(=CBr)C254', 'C=C(C)C(O)=CC=CC=CC=C(O)CC', 'CCCC(C)CC1=CC=CC=CC=CC=CC=C1.CN', 'C1#CC2=CC1=CC1=CC=C2C2=C3C=CC=CC(=C2)NCOCC2C1=CC2CC3', 'C1#NC=1.CC1(C)CC1.CCN=C(O)NN(CC)C1=C(C)C=C1', 'CC(#CC#N)C(C)CCC1=CC2=CC(=C1)OCO2', 'C1=CC=C1.CC1=OCC(C)OC(C)=C1C=C(N)C#P', 'C=C(C)C1C(=O)C2=C(C)C=CC=C(C(CCCCC)=C2)N1C', 'N#CC1=CC=C1C(Cl)=CC(Cl)=CC1=CC=CC2=C(O)C3C(C1)C23', 'C.C#C1C=C(Br)C(CC2=C(CO)C=CC(O)=CC#C2)=CC=C(NC)N1C', 'CC#CC(=CC=C(O)C#N)C(C#P)=CC(Cl)=CC=CC(Cl)=CC=C(O)C#N', 'Cc1cc2c(F)ccc3c(c-2c1)N(C)C3=O', 'C1=CC=C1.CC1=CC=C2C=CC(O)=C3C=C4C#C(C1=C3)C2=C4', 'N#CC1=CC2=CC=C(C=C1)OCCC2', 'C#N.C=CC(COC)CC1=CC(O)=C(Cl)C(P)=CC=C1Cl.CC#N', 'C#N.CC1(C)=C2N=C3C4=C(C=CC=C4)C(Br)OCC2C31.O', 'CC#CCCC1CCC#CC(=CC=CC)=OC1', 'C#N.CCCC(CC=CC=C(C)C#N)CC(=S)c1ccc2cccc(CCC#N)c2c1', 'C.C=CC1=CO=1C(N=C(S)C#N)NCNCCO', 'C1=CC=CC=CC=C1.C1=CC=CC=CC=C1.CC', 'CCN(C)C(C1=CC=C1Cl)=C(C)F.CCN1CC1=O', 'C#N.CCCCc1cccc(C#N)c1O', 'CC1=CC2=CC3=CC(=C4C5=N(C2=CC#C4C)C(C)(=S)N35)C=C1', 'C1=CC=C1.C=C1COC=CCN(C(C)=CC#CO)C1=C(Cl)C1CC1C#N', 'COc1c2c(C)cc3c1=C(C#N)C2(C)CC=CC=CC(Cl)=CC=3', 'C=CC(C=CCCC)=CC1=CC=CC=C1N#CC.CC(N)=O', 'C#CCl.ClC1CCC1', 'CCC(C)N=Cc1c#cccc1', 'COC1=CC(C)=CC=C(C#N)C=CC=CC=CC=CC=C1C#N', 'C.C.C#N.CC(C)CN#CCC1=C2(Cl)C1=CC2C', 'Br.C=C(O)C=CC.CCC(C)(C)CC', 'CC=CC=C(C=CC)C1(CC)=C(C)CC(C)=C1S.O=C1N=CN1', 'C.CCC.CCN(CCCOC)CCN1C=OC2(OC)=CC=C2C1=O.OCCl', 'CCC1C(C)=CCCCC1C1CCC(#N)C(=CC#N)CCC1O', 'CC=CC=CC=C1(C#N)(C2=CC(C#N)=CC=C2O)NC1=S.COCCOC', 'CC1=CC(C2=CN(C3(C)C=CC=CC=C(O)C=C3)C=CC=C2C)=N1', 'CCC(=CN)C(C)=O.CCC(C#N)=C(C)C=CC=CC=C(C)C(C)C=CC#N', 'CCCOC1=C2C(N)=CC=C(Sc3ccc2[nH]3)C(C)=C1', 'CC#NC(C#P)=NCC(C)N(C)C1(C#N)=CC=C1O', 'CC=C1C2C3C=CC=CC2N1C=C3.c1ccccc#1', 'COC1(I)=CC=CC=C2C=C(C#CC=C1)S2', 'COC#CC(=O)N1C(C)=C1C#N.COc1cccc(Cl)c1', 'CCOCC1CCC2=CC3=CC(=CC=C2C(C)C3)CC(#N)N1', 'C=CC#N.CN(C)C#N.COC1=CC2=CC=CC=CC=C(C=C1)C[SH]2C', 'COC1=CC=C(C#N)C(C)=CC=C2C#C(CCN2)C(C#N)=C1', 'C.C.C.C#COC(C)OCC.CC=C=C(C)(C)CC', 'CNCO.Cc1ccc2c(c1)O2.N#CC#N', 'Cl.F.OC(F)C1(N2=C(P)C3=C4C=C35SC3(=CC=C3F)S5=C42)=CC=CC(F)=C1', 'COc1ccc(C2=CC=C2NC(N)=O)cc1', 'C[IH]C(N)(Cl)=NC(C)CC=CC=C1C#C1', 'C.C1=CC=C1.C=CC(C)(C)CN(C)(C)C1=CC#NC(C)NC1=O', 'CC1=CC=C2CC(C)c3ccccc3C(C#CO)=CC=C12', 'C1#NC1.COC1=CC=C2C=CC=CC=CC=CC=C(C=C1)N2', 'CC=CC(C)=CC=COC1=CC=CC=CC(NC(N)=S)=C1', 'OC1=C23C=C(SC4=CC=CC=CC2=C4)O2(=CC=CC(Br)=C1)=O3=C2', 'C1=CC=C1.N.N#CC(Br)=CC=C1C(NC2CN2)=CCc2ccccc21', 'CCC(C)=CC1=C2C=C1C(CC)(=C(O)C#CCCC#N)C=C2N1CC(C)C1=O', 'C.CCNCO1C2=C3CC1PC(C)C3(O)=CC(C)=C2.Cl', 'CC#C#N.N#CC1=CC2=CC=CC=CC=CC=C(C=C1)C=C2', 'CC1=CC=C(C2=C3C=C(C3)C(=C(O)C#N)O2)C(C)=CC=C1CCN(C)CC#N', 'C=C(O)C1=CC=CC=CC1.CCCNC', 'CC1C#CCC(C(C)C(C)C(C)C)C1', 'COP=S.N#CC=CC=CC=CC=C1C=O1', 'CC#CC(C)=CC(C#N)=C(Br)C=CC=C(CC)CC.CCCCCCO', 'Br.C.CCC1SCC(=CC=CC=CC#N)C1(C)N(C)O', 'CCC1CNc2cccc1c2.N#CF', 'CCc1ccccc1.O=C(Nc1ccccccccc1)OC#[SH]', 'CC#N#CNC1=CC=CC2=CC=C1C=C1C=CC3=CC=C4C(=N1)C(C)(C)N(C3C)C4N=C2', 'O=C1C=CC=C2CC=CC[SH]3CCCS123(=O)C1CCC1', 'CCCC1=C(O)C=C1.COC1=CC=C1Br', 'CC(#N)CC1=CC=CC=CC=C(C)(Br)C=C(C(C)(C)C=O)C=CC=C1', 'C#CCCO.N#CC=CC=CC=CC#CC=O', 'CCC(=CC1=CC=C1Br)CO.O', 'C.C#N.CCC(C)CC(=O)C(C#N)CC', 'C=C(C#N)CC.CC=CN1CCN(CC=CC(C)=CC2=C(C=CCC)OC2)C1=S', 'Cc1c2ccc3nc(sc13)c(C)c1c#cc(ccc2O)n1C#N', 'CC(C)C.CC1=C(C#N)NC(=S)N(C#N)CC1C.N#Cc1ccccc1', 'C=CC=CCCC=C1C#C#C1', 'C#C(Br)(CCC(C)C)C(=O)OC=CC=C', 'CC1=CC=C2C(Cl)=CC=C(C#CC=C1)C=C(C)C=C2(F)N#CC=CN(C)C', 'CC1=C23=C4C5C1CC#CC(C)#CC#P5O4C2=C(C#N)CC3', 'N#CC=CC1=CC=C2C=CC=CC=CC(=CC=C2)OCCO1', 'C#N.CN(C#O)CC1=CC=CC=CC=C1', 'CC(C)=CC=CC=C1O=NC2=CC(=C2)C(C)=NC1=CC=C1C=C1', 'N#CC1=CC=CC2=NC3=C4C=CC(=C3)C(CC2F)OC(F)(=C4)C#CC=C1', 'CC(C)C1C#C2C(C(C)Cl)C1C2(=O)C#N.FC1=CC=C1Cl', 'Br.COC1=C(C#N)C=C1C(C)=S', 'CC1#CC(=O)CCC1.CC1=CC=C1', 'CC1=CC=C(Br)C(OC2=C3=C4C#C5OC23C45)=C1', 'C=CC=CC=C(F)C=CCCCC.ClC1=CC=C1Br', 'CCC=C1C=CC=CC2=CC=CC(OCC)(=CC=C(SC)C=C2)OP1(=O)=S', 'CC=C12=CC(C)=CC=CC3=CC=C(C=1)C(Cl)=CC=C(C=CC=C2Cl)N=C3C', 'N#CC1=CC=CC=CC2=CC=C(Cl)C=C1C(C#N)CCNC2', 'CC1=CC(=C(C)CC2=C(C)(NC#N)C(#N)OC2O)C(C)=CC=CC=C1C#N', 'C#CF.C#NCCN1CN2CC#CC3=CC=CC=CC(=C(C)C(F)=C3)CC3(CC2)CN3C1', 'O=C1CCC#CCC1', 'C=CC.CC(=CC=CN(C)CC(C)CCC1CC1)=CCCCCC(C)C', 'C.C[PH](=O)O.ClC1=CC=CC2=CC=CC=CC=CC(=CC=C1)N2', 'C#COC(=O)(Cl)C(=O)=CC#N.C1=CC=CC=C1', 'CC(C#Br)=C(C=C1C=N1)C1=CC=CC=C1', 'C1#CC=C1.CC(Cl)=CC#N', 'CC1#CC=CC=C2C=C(Br2)C(=O)NC(C)C1', 'C#C.CC(I)CCC1=C2=CC=CC=C(C=C2)C1', 'C#CP(#N)(=O)(O)BrC(Cl)=CC(C)=C1=C(C=C2C=C2)#C1', 'C#CC1C2=C(C=O)C13CC1=CC(=CC4=CC=C42)C=CC2=CC=213=C(C#N)C#N', 'CN(NC(=O)C1=C2=C(C#Cl)=CC2=CC=C1)C1=CC=CC=C1', 'C=CC.CCN(C)=C1=C2CC345=C2CCC3SC(C)=CC=C4C=CC15', 'C#N.CC1=CC(N)=CC=CC=C1Br.OC1=C(O)C#C1', 'C=CCCCC(O)CC', 'C.N#CCC(O)CC1=CCCC=C=CCC#CC=CC=C1', 'CO.OC1=CC2=CC=C1N1(CC1)C1=CC=C(Cl)C=C(I)C=C2C#C1', 'C.COCCOc1cc2ccccccc1cc2', 'C#C(CC(CC(C)(C)C)C(C)C)C1=C(Cl)C#C1I', 'O=C1CC2=CC(Br)=C3C#CC(F)=CC=CC=C2P3(=O)N1', 'CCCN1CC2=CC=C(OC)C(Cl)=C(C)C1=CC=CC=C2.N#CCCCCO', 'CCCSC=C(C=CC=C(N)S)C(C#N)NC#[SH]', 'CCC1=CCC(C#N)=CC(OC)=CC=CC=CC=C1SC(=O)O', 'CC1CNC=N1.CCc1ccccc1', 'CC.CCCF.COP1(=S)SC(=CC2=CC=C2)S1.N', 'C1CNCCN1.COC1(c2ccc(Cl)c(F)c2)CC1', 'N#CC=CC=CC=C1C=CC2=CC(=C1)F#CC(N=C(C#N)NC=S)=C2', 'CC1=CC=C(O)C(NCO)=CC=C(C=CCO)C1=O.CO', 'CC.CCC1CC(CC(C)C)C=N1.NCC(CC1=C(Cl)C=C1)NC=CC(Cl)#CCl', 'CC(C#N)=CC=CSCCNC=Nc1cccc2cc(c(C)cc1)OCC2', 'CC1=CC#N2CCOC(=CC(N(C)C#N)=CC=C1)C=CC=CC=C1N=CC=C12', 'CC#Cc1ccc2n1C(CCC#N)=C2.ClC1=CC=C1', 'C1#NO23=C14=C1(=C2)(C4)C2=CC1=C23.C=C.CC1#NCC1', 'C=C1OC(=O)C1=CC1=CC=C1OC(C)=O', 'CC1(COC#N)CSC(C(#N)C2=CC=CC=C2)C1', 'ClC1=C(C2CC=NCCCl2)C=CC2=CC=CC=C1C=CC=C2.N#CN', 'C1=C2CNC2=C1.CN(C)C.FC1=CC=C1.N#CC=C(Cl)C=CC=C(O)C#N', 'COC=CC12=C3C=CC=CC=C31C(C#N)=O2', 'C#N.CN(C)C(N)=CC(Cl)=CC=C(F)CC1=CC=C1', 'CC1=CC=CC(Br)=CC(=C(C2=CC=C2O)C(C)C)NNN1', 'N=C1C2=CC=C3(C(F)=C2)C2CCN4C(=C(C2Cl)[SH]13)C1CC14', 'CC1C2=CC=C(C=CC=C3c4ccccc43)O[PH]#Cc3cc2ccc31', 'CC1CC(O)CC2=CC=C(C#N)C#CC=C2N1', 'C#N.ClC1=CC=CC#NC(Cl)(C(Cl)Cl)C=C1', 'C.C=C(C)C(#N)C#CCCC(C)CCCOC#N', 'CO=C1C2=C(F)C=N(NCC2=CCC#N)N1N', 'COC1=CC=CC=CC=CC(C(C)C2(C)COCNC(=S)NC2C)=CC(C)=C1', 'CC1=CC=CN#CC=C1NC(C)=C(Br)COC#N', 'CC#N.CC1=CC2=CC=C(C=C1Cl)NC(=O)C2', 'ClC=C(Cl)C=CC=CC=CC#[PH]I.O[PH]#[SH]', 'C=C(C)(Br)N(C)P(=O)(=O)=S.CC12C=C1(CC#CC#CC#N)C(CC#N)C2', 'CCCCN(C#N)(CC)CC1(C#N)=CC=CC2=CC=C1C=CC=CC=CC#C2', 'C=C(C#N)OC.OC1=CC(Cl)=C(O)(Cl)NC(=NCl)C2=CC=C(Cl)C1=C2', 'CC(C)C=CC1C(C)CC(C2=CC(O)=CC=CC=C(Br)C=CC=C2)CN2CCC1C2', 'NC(=O)BrC1=CC=C1C1=C(C2=CC(O)=C3BrC3=CC=C3C=C3NCCCC2)C1Cl', 'ON=CC1=CC2=C3C=C(C#CC=C4(O)C=CC=CC5=CC(=C51)Br4)C#NCC32', 'CC=CC=C1C=C(C)C=CC(=CC=CC(=CC#P=O)CC)CCC1', 'N#Cc1c(F)ccc(O)c1Br', 'C1=CC=CC=CC=C1.C=CCl', 'C#CC#N.CCC1(CC)CCN1.CCCCC#CC=COc1ccc(C)cc1', 'C#CC1=C(CO=P2(O)=OC2)=C(C)(CC=C)=C1.CC', 'C=C(C#N)CNN=C(NC)C12=C(Cl)C=CC=CC(Cl)=CC(Cl)=C1C=C2.O', 'C.CC=CN#NCS(S)=[IH]', 'CC1C(Br)=CC(C)C2(=CC=C2)N(C)C1C.CCO.COC1=CC=CC(O)=C1', 'C=CC#CC=C1(CC)C2=C3(C)CF23CC1NCC.O=C1CCS1', 'CC1=C2C=NNC(O)(O)C(C=CC=CC=CI)=CC=CC2=C1', 'CC=C1OC2C3CC3C3CCC132', 'C=C1CCN(C)C2=C(Cl)(=C(O)Cl)C(=C(Cl)C=CC=CN)CC(#N2)C1', 'C=CC(O)=NC=C(C)c1ccccc1.CCCO', 'COC.Cc1ccccccc(N(C)C)cc(O)c#cncc2ccc1-2', 'CC1=C23(C=C(C#N)C45=C6CC(C)(CC#C2(#N)C=43)C(=C5)O6)CC=C1', 'C=CC(C=Nc1ccc(O)c(Cl)c1)=CC(Br)=CC=C(F)CI', 'CCC1OC2=CC=CC=CC=CC=CC=C(C=N)C=CC=CC=CCN21', 'CC=CC=C(C=C(C)C#CCC1CN2N=C2NN1)OC.CN#N', 'C=C1C=CC2=C(Br)C1(=CCC#N)CCCCCC2C', 'COC(F)=CC(Br)=CC(I)=C1C=C(F)F=[SH]1', 'CC1=CCN(CC2=C3O=CC2CC=CC2=CC=C23)C1.CCC.O', 'C1=CC=CC=C1.CC.CC(#N)N', 'C.C1=OC1.CCCCCl.ClC1=CC=CC=C1.O#P#O', 'CC.CC1CC2C3=ClC(=CC(Br)=C3)C=C(Cl)COC2CCN=CN1.CCCC', 'CC.CNCOC(=S)N#CO.CO', 'C#C.C#CC=CC.C=CC(=C)OC', 'N#C1N(C=O)C2(S)=CC123=CC=C1Cl=CC2=C3C2=CC=C1Cl', 'C=CC=CC(C)=CC=CC#CC1=CC=C(C(=CC=N)CCC)C=C2(C)CC=C1Cl2', 'C#CC1=CC=CC=CC(C(=C)C=C)=CC(C)=CCC(O)=O1.CC1=CC=C1', 'CC#N.Fc1ccccccccc1', 'CCCCCC(=C(C)C)C(C)Br', 'CC(C)=CC=C1NC(=O)[SH](C)C(C#N)=CC=C1C1C#CC1', 'C#C(C=CC1=CC2=C(C=C3C=C4CC(N)=C34)Br12)C(C)(C)C', 'COc1cc(C(Br)=CCO)c(C)cc1C=NC1=CC=C1', 'CC(SC#N)=C(C=CC#N)Oc1cc2oc1-2', 'CC(O)=C1C=CC(Cl)=C1.N#Cc1cccc2[nH]c-2cc1I', 'F.N#CC1=CC=CC=CC=C2C=c3ccc(c#c[nH]c2c3)=CC=CCC1', 'C1=CC=C1.CC1C2CN3CC24CC2CC3=NCN3CCN14CC3C2', 'CC(F)OC(=O)C1(Br)=CC(F)=C1.N#CN1CC1', 'CCC12=O3=C4[SH]5CC5C56C=C7C(=CC=C7C45C1C2CCCC3(C)Cl)C(=CCl)C(C)C6', 'C=CC.CC.CC.CC=C(=CC1=C(Cl)#C=C1)C1=CN(P)#CNCCCNC(=S)N1', 'CC1C=c2c(ncc3ccccc23)=CC=CC=CC=CC1', 'C.CC=CCOCC.CC=CCOCCCC1CC(C)(Br)C1CC#N', 'C#CC12=C3(=CC=CC13CCC)C=CN2(CC)C(#COCCC=C)CCCCC', 'CC1=CC=C2N#CC3=CC=CC=C14C1=CC=C3C1=C24O', 'CC1=CC=CC=C(Cl)C(Cl)=C1Cl.O=P1(=S)N=C2CN21', 'CCC1CC2=CC=c3ccc(cc3)=C(C=C(C)C=C2)OCC(NC#[SH])=N1', 'C1CCCC1.CC1=CC=C1c1ccc(Br)c(Cl)c1', 'C.C#CC1(C(C)C=O)=C2=CC3=C(C)CC=C(=C2C1)C=C(O)C=CCC=C3', 'O=C1NC2=C3C=CC#CC=CC=CC=CC=CC=C(S3)C(Cl)C12', 'C1=CC=C2=C3(=OC(=CC=CSC4(=NN4)N3)C=C2)C=C1', 'CN1CC2=CC=C3(I)C=CC=CC(=C2)BrC3(O)=CC1=O', 'C=CC1C2CCC=C(=O)N1C2.CC1CCC#C#CC(C2=C(Br)C=C2)C1', 'CC1=C(C)C2=C3C=NC(=C3)C(Br)=C3(C#C1)CC3=C2', 'C1=CC=CC=C1.CN1(C)CCC1', 'CC1=CC=CC(Br)=CC=CC=CC=C1.CCC(C)CC(C)OC', 'C=C1C2=C34=C5=Cl=3(CC5)C2C1NC=CC(CC1=CC=CC=C1)=C4', 'CC=C1C=C2C(Br)=CC=CC(C2=CC#COCC#Br)C(C)C#N1', 'C=C1C#NC(=O)C2=CC3=CC=C3C=C2O1', 'C[SH]1CCC(CCCOc2ccccc2)C1', 'C=CC1C(=C)c2cccccc(NC=CC(=C)C)ccc21', 'N#CCCC1=CBr1C1(OC#N)=CC=C1C1CC1', 'CC=CN=C1SC2=NSCSC3=C2C1(C)(C#N)CNC3.CCC(C)C', 'CO[PH]#CC1=C(Cl)(P(=O)(=OC)SC)C1=C1C=C1', 'C=CC(=S)NC1(C)=O23=C1C(C2)C(=CC)O3C1(O(C)C)=CC=CC=C1', 'CCCC=C(O)C1=CC=C(C(C)(C)C)C(C)(F)=CC2C1N=[P+]2[O-]', 'C=C(=CCC(C)CC1=O(NO)CC1)CCCC.CCC', 'CC.CCCCC(C#CC#N)OC1=CN#CC(C)=C1.CCOC.N#CN', 'Cl.O#Cl1NC2=NC1=C2', 'C#CBr#C(CBr)C(C)=O', 'CC(Br)=C(Cl)C=C(C=CC1=CN2CN(CCN1)CC2C1=CC=C1)OC(C)C', 'CC(C)=NNC=C1C=CC=Cc2ccccc(c2=S)C(=CC#N)C1', 'C#C.C#CCOC=O', 'C#CC=C(Br)C=C(C)C=CC.CC1CC(=O)C1', 'CC1CCC2CC3=C1(C=C3)C2CCO.CCCC', 'CN#CC1=CC#NCC=C2(O)=C3=C(C=C2)C3=C1', 'NC1=CC=CC=CC2=C1C=CSCCCS2', 'C=C1CC1BrCCO.CCCC1CO1', 'CC1(=O)NN=CC2=CC=C(S1)C1=CC=C2CO1', 'CC(C)CC(C=C1#CC=C1C=N1C2=CC3=C(C=C21)Cl3)CBr', 'CCC.CCCCCSC(C)C1=CC(F)C(Cl)=C(O)C2=C1[SH]=C(O)C2', 'CCC1(C(C)C)CC23CC12=CC=C(F)C=C1C=C2CC123', 'CC1=NCCC(O)C(Br)=CC1=CC=CSC1=CC=CC=C1(F)C#N', 'CCC1=CC=C1.Nc1cccc2c(Cl)cccccc-2s1', 'CC=CC1=CC=C2C=C(C=C1)CCO2', 'CC(F)CC1=C[PH](=O)O1', 'CC=CCCCCCCC1CCN1CC=CC=C1C=CC=C(C)C=C1', 'CC1=CC(OCCO)=C2=C=1C=C2.CCCC1=CC=CC=C1', 'C=C(C)C(=O)N(CC)Cc1cccc(C)c1', 'CN=C(N)C(C#N)=CC=C(C)C=C(C)Br.CO', 'COC#CC1(Cl)=CC=CC=C1(C#N)C(N)=O', 'C=C(C)C=NOCC#P#[SH].COC', 'COC#CC=C(C)C=C12NCCNCC(C)C3(=CC=C1C=C3F)C2#N', 'C1=CC=C1.N#CC1=CC=C(C2=C3CCC3NC(=S)N2)C(F)(Cl)=C1', 'CC(C)C1=CC=CC2=C(N2)SC1=CC=CC=C1N=CC(ONC#N)=CC2=C1C(Cl)O2', 'CC=NNC(=N)N(CC)NC(=O)CC.Cc1ccccc1', 'CC.CC#CCCC(=O)C1CCC1CCC1CCCC(=O)C1(C)CCCC', 'N#CN(C1=CC=C1)C1=C(Cl)C=CC=CC=C1.c1ccccc1', 'C#CC=C(NC(=S)Nc1ccccc1)C(C#N)=CC=C', 'CC1C=CC12=C(C)(N)C1=C(C=C1)C1=C2C=CC=CC=C2OC1=CC=C2N', 'CC(=O)C(C)c1ccc2c(c(C#N)ccc(O)c1)=CC=2', 'CCC1CC2CCCCC1C1=CC=C3C=CC=C1CN3CC2', 'CC(Br)C=CCOCCBr', 'CN123C4=CC=CC=CC=CC(#N#Cl)=CC(=C5C=C451)NN=C2C31=CC=C1O', 'CC12=C3(C)=C(CN)(C=NC1=C3)C2.CNC1=CC=C2CNC2=C1', 'CC(=O)NP(C)(=S)Nc1ccccc1.CC(C)C', 'BrC1=CC=CC=C1.C1=CC=C2CN(OC3=OC3)C2=CC2=CC=CC2=C1', 'FC(=CC1=CC=C1)C(=CC=C1NC2C=CC=CC=C2O1)OCCCI', 'C=C(C)C.N#CC#P.S=C1NCCC2=CC=C2O1', 'C#CC=CC=CC=CC(C)=C1OC1C', 'CCOC1=C2=C34(CC3)CC1(C)(CC4C)C(O)N2', 'CC(C)C.CSC(#N)NC=C(I)C=C(C)CCCl', 'CCCC(C)O(C=O)(=OC(C)C)C(C)CCC', 'C=CC1=CC=C2C(O)=CC(=C1OC)N(CC)C(C)C(C)(CC)C2CCC=C(C)C=CC.Cl', 'CC1=C2C(N3C(=O)CC3C)=CC=C3C=C1(OCC1C=C4CC1N4)C2=C3O', 'C=CC=C1C=CC=N(C#N)C(=O)N1CC', 'COC1CSC2=CC=C3C=CC=CC2=CSC(=S)C(CCC1SC(N)=S)O3', 'C#O.C1=CC=CC=C1', 'C#CCCC(#C)CC(=O)SC=CC=CC', 'C.CC(C)=C1CC1.CC1=CC2=C13CC#NC3(C)C(C)=C(O)C1=CC=CC=CC=C1OC2', 'CCOC=CC=C(C)C#N', 'C1=CNC1.C=CN(O)(C#N)CCC(C)Cl', 'CC=C1NC(O)CCCC2CCCNC(N2)c2ccc(Cl)cc21', 'CC(O)C(NC#N)=C12=C3(C)=C=1(=C1OC1N14C=P1#CC4)(C=C3)C2=CBr', 'CC1=CC=C2C=C(Cl)C=CC3=CC4=CC(=C1)C3(CC2=O)C(C12=CC=C1C2O)=CC=C4', 'C.CC=C1(C)C(CCPN)=CC=CC=CC1OPO', 'CC1C2=CC=C3CC14(C)(C)=NC(=CC=C2)C=CC(=CC1=C3N=C1)C4', 'C=C1C#CC=C2(=C(F)C(C)=C2)O1', 'CC12=CC3=CC4=C5C=CC(=CC=C1F)C(N)=NC(C3)CO42=O5.N#C#N', 'Br.CCC=CC(O)=CC=CCCCCCC', 'CCOPO=P(=S)OC=C(Cl)C=C(Cl)CCl', 'N#CN.OC1OC2=C(C=CC=C2)CCCC=CC2=CC=CC=C21I', 'C#CN1C2=C3C=CC31=CC=CC=C2', 'OC12=C34C=CC=C5CC=C3N=CC3=CC=C(C=CC=C1C=NC#N5)Cl24Cl3', 'C1CO1.CC=C(NC=O)C(Cl)=CC=CC=CC#N', 'C#CC1(=O)CC(C)=C(CCC)C1(=C)Br', 'CC1C(=CC=CC#N)OC2=CC=CC=CC=C21.COC', 'C#CC.CC1CCCCO1', 'C#CCC=C1C=C(C)(C#C)C1.C1#CC=C1', 'C#CC=C(C)C1=C(Br)C(=CC=CC=C(C)O)NC2CC(C)NC(=O)N12', 'CC#CC=C(C)(C#N)C1=CC=CC=C2C=C1C=NNP1(=O[SH]=1)Br2', 'CN1CCC2CNc3cccccc2c1cc3', 'CSC=C(N)CCN1(C2=CC=CC=C2)CCBr1.N#CC#N', 'CCC=C(OC)C1=C2C3=CC=CC=C4C=C(OC)C(=C(C3)C4=NC23=CC3)N1C', 'C.CC(=O)OC(C)=CCCC1=CC=C2C=CC=C1O2', 'CC1C2=CC=C3C=C(C(C=N)=C2)N2CO(CO3)C3=CC=C3N1C2=N', 'CN(C1=c2oc3cc2CC(C)(O)C1=CC=3)C(C)(C)c1cncs1', 'ClC(Cl)(Br)(Br)I.O=[PH]1OCSC1=C(Cl)Br', 'C1=CC=C1.CCC[IH]C1O=CC2=CC=C21', 'CC1=CC=C2OC3=CC=C2C=CC(=C3)NC#C1.CSC#N', 'CC1=CC(Cl)=CC=CC=CC2=CC(=CC=CC=C1Br)C(=O)N2', 'N#CC#CCC1(Cl)CCC1N1CCC1O', 'CC=Cc1cccc(OC)c1C(C)(O)OC.CCc1ccccc1', 'C#N.CC(C)=C(C)(C=C(NC1=CC=C1C#N)C1=CO1)=CC(C)(C)C', 'C=C(Cl)C=C1C=CC=NC=C(C(O)Br)N(O)C1', 'N#CC1=CC=CC=CC=C1.NC=CCl', 'CCCCC(#N)C(C=C(F)OC)=CC(F)=CC=C1C=C(C#N)O1C', 'CC1=CC(=Cc2c#cc#cc2)C(CO)C(C)CCC1', 'COCSC1=CC=CC=C(C)SCC23=C(CC(=O)N2)C3=CC=CC(Br)=C1', 'COC(C#N)=CC=CC=CC=C(C)C(=CC#N)CC[PH]#[SH]', 'C=C(C)C=C1C=C1C=CCO', 'CC(C)C1=CC=C1.CC1=CCO1.CCC=CC(C)=O.N#N', 'CC1CCCC1.CNC(C)=CC(=CC=CC=C(C)C)NCBr', 'CCC(N#NCC1=CC=C1)C1=C(Cl)N1', 'CC1=CC=C23NC(=NC2=CF)N2C(=C4(F)OC4F)CC2C3=N1', 'C=C1C2CC1(C)C(C1=C3FC1=C3F)#N2', 'Fc1cccc2cc(I)cc3cnc=3cc1OCCO2', 'C=CCC12CCC1C2', 'C=CCCC(C#N)=CC(O)Cl.CCCC=N.ClC1=CC=C1', 'C=C1C=CC=C(C)C=C2C3=CC14=CC=C(C)NC2=NN=C3(C)(N)C4', 'CC1=CC(I)=C1.Cn1c(=O)sc2ccccccccc21', 'FC1=C(F)C2=CC=CC=C1C(Cl)=C21CC1OCCN1=CNP1Cl.S', 'CC(O)C1(Br)=CC=CC=C(C=N2CCO2)C=C1C#N', 'CC(C)=C1C(Cl)=C2C3=CC3=CC=C(C#CC1C)C(C)CC1(CO1)C[PH](=O)C2Br']
+All SMILES saved to CSV
+All smiles saved
+[None, None, None, 'C#CC(C)C#C', None, None, None, None, 'FC1=CC2=CC(Cl)=C3C=CCCC1=COC23', 'CCC1=C2C3=CC=CC(O)=C(CCO)C=C(C)N=C(N)C2N(CCC3)C1', 'CC1=CC(Cl)=C(C(=O)O)C1', 'N#CC1=CC=CC(Cl)=CO1', 'CCCCC=CF', 'CC(CCO)C(F)Cl', 'C=CC(O)=NCC(C)CNC', None, None, None, None, 'CC(C)SCPN=S', None, None, None, None, 'CC1=CC(C)=C(C#N)C=CC=C1', 'CON=CC(Cl)=C1C=CC=C2C=CC=NN=CC3=CC=C(F)C=C(C=C1)NC2=CC=C3', 'CC(C=N)=Cc1ccc(Cl)c(C)c1Cl', None, 'CC1CSC1=CC1=CC1', 'Cc1cc2ccc1C(C)(I)COC2=NCCC#N', 'C1=COC1', 'CC1CC(CC(C)OC=CC(O)Cl)C1', 'NN=Cc1nc2ccc1=2', None, 'COC(=CC(Br)=CC#CBr)C1=CC=C1C1=NN=C1NC#P', 'COC1=C(Br)C=C(C=CC=C2C=C2C#N)C2=CC=CC(=C1)N=C2C', 'N#CC1=C2C=Cc3c(C#N)c(cccccc1c3C1=CC=C1)C(=O)N2', None, None, None, 'CC=CCC(C)OC=O', 'C=CC=C(C)CC(CCC(C)Cl)C(CS)SC#N', 'C#CC(CC(C)O)C1=CC1C', 'C1=CCC=C(C2CCCC2)C=C1', None, None, None, None, None, 'CCC(C)=C1CCCCC=CCC1O', None, None, None, 'CC#CC=CC=C1C=CC=CC(SC)=CC=C1NC#N', None, 'CC=CC=CC=C(C#N)NC(N)=NC=COC', 'CC1(C)CC=NN=C(SC=CC=CC2=CC=CC=CC=C2Cl)C1', 'CC(C)CCC(C)C1CC=CC=CC1', 'C=CC=CC=C(C)C=Nc1ccc(CC(C)=CCNC(C)=CC=NC#N)cc1', 'CC1=CC=C2C=CC=C(C=CC(C)=C1N=C(C#N)C#N)C2', 'CC=C1CCC(C)(C)C1', 'C=CC1C(C#N)=CC=CC=CC2=CC=C(C)CN(C)C1=C2', None, 'CCC(=C(C)C)C(O)(P)Cl', None, 'CC1=CC=CC(=CC=CC=CN2CCNC2=S)C1', None, None, None, 'C=CC(C)=C1ON1C(C)C=CC=C1CC1', None, 'CCC1C(=CC#N)N(P(C)(=O)OC(=O)CC=CC=CSC)CC1C(C)C', 'COC(C)CCCCCC1=NC(=N)N1', 'C1=CC=CC=CC(C2C=NO2)=CC=CC=C1', 'C=CC=CC=CC=CC', None, 'CC=CC(C)C=C(C)NC(C1=CC=C1)C1=CC=C(F)C=CC=C1', None, 'N=CC1=CC=CC=C(Cl)C=C1', 'COCC(Cl)=CC=CC=C1C=CC=CC=N1', 'CCCOC(=O)NC(C)c1cc(C)ccc1C', None, 'CC(C)=C1CCCOC(C)CO1', None, None, None, 'Clc1ccc(N=CC2=CC=C2)cc1', 'CNc1ccccc1', None, None, None, 'N#CC1=CC(=CC=CC=C2CCC2)C1', 'O=C1OC1O', 'Clc1ccccc1Cl', None, None, None, 'Cc1ccc2cccc(C)c2c1', 'N#CSC(C#N)=C(F)C=CC=CC(F)(Cl)Br', None, None, None, 'c1ccc2csc(cc1)[SH]1OC1O2', None, 'CC=c1ccc2cc1ccc2CCCO', 'CC=C(C=CC=C(Cl)C=CBr)NCNP(=S)(OC)OC', 'CCCCCCC(=O)C1=CC=C2CC(C)(CC1C=C(C)CC)O2', 'CC(C#N)=CC=CC=CC#N', 'CCN1CCC2=CC=C(C=CC=CC=CC=C2)NC1=S', None, None, 'CC=CC=c1cc2oc1=C2C1(C)OP2CN2CC1CC', 'C#CN(C=C)C(N)=O', None, None, None, None, 'CC(C)=CC=CC1=c2ccccc([nH]c(=O)nc2)=CC=CC(Br)=C1O', 'Cc1ccc(C#CO)c(Cl)c1', 'CCC=COC1=CC=CC=CC=C1', 'CC1CCCN2CC(c3ccccc3)C3CCC(C)C(CC2=N3)C1', None, None, None, None, 'CC1(C=NO)Cc2cc3ccc4oc(cc(c-4cn2)C1N)C=CC=C3', 'C=CSC(=S)NN1CC1', 'C#CC=CC(C)C1CCCC=CC=C1C', None, None, None, 'O=C(NCCC1=C(Cl)CCCCCC=C1)OC1=CC=C1Cl', None, None, 'N#CC=C(C=O)C=CC=CC(F)F', 'C=CC(=CC1=CC(N2C(=O)CC2C)=C(C)C=CC=C1)C1=CC=C1Br', 'N#CC=COC(=S)NC(C=C(Br)C=C1CC1)=NCl', None, 'CCCCc1ccccccccc1C', None, None, None, None, 'C=C(Cl)C1=CC(CC(C)CC(O)F)=CC=CC=NCCS1', None, 'CC12CC3=CC=CC(=C1C=C3)OCC(N=CNC#N)C2', 'CC1CC(F)OCCC2C3=C(C=C(F)C4=CC=C4)C12C3', None, None, None, None, 'OC1=CC=CCC=C1', 'CC(C)OC1=C(C(C)Cl)C=C1', 'CC1C=CCC1', None, 'FC1=CC=Cc2ccc3c4c5cc([nH]2)[SH]2C6=COC2(CC(=C1)C=C4)C6=CC=c35', 'CC(C)CC(Cl)CC=CCNC(=O)c1ccccc1', None, None, 'C1=CCC2CC(=C1)CC1(C=CCC1)C2C=CC=C1C=CCO1', 'CC(N)Cc1cccc(NC#N)c1Br', None, None, 'CC=CC=C1C=C2C(=O)NN=CC12', None, None, 'C=CN(C=S)P(=O)=O', 'COCc1ccccc1', 'C=C1C(=CC=C(C)C)C2=CC=C=CC12', 'C=C(C(F)Br)C(C)(CC)CCC', None, None, None, 'CC=CCOCCC', 'CC=Cc1ccccc(C)ccc(CC=CCCBr)c1', None, None, 'C=C(C)C(O)=CC=CC=CC=C(O)CC', 'CCCC(C)CC1=CC=CC=CC=CC=CC=C1', 'C1#CC2=CC1=CC1=CC=C2C2=C3C=CC=CC(=C2)NCOCC2C1=CC2CC3', None, None, None, 'C=C(C)C1C(=O)C2=C(C)C=CC=C(C(CCCCC)=C2)N1C', 'N#CC1=CC=C1C(Cl)=CC(Cl)=CC1=CC=CC2=C(O)C3C(C1)C23', None, 'CC#CC(=CC=C(O)C#N)C(C#P)=CC(Cl)=CC=CC(Cl)=CC=C(O)C#N', 'Cc1cc2c(F)ccc3c(c-2c1)N(C)C3=O', None, 'N#CC1=CC2=CC=C(C=C1)OCCC2', 'C=CC(COC)CC1=CC(O)=C(Cl)C(P)=CC=C1Cl', None, None, 'CCCC(CC=CC=C(C)C#N)CC(=S)c1ccc2cccc(CCC#N)c2c1', None, 'C1=CC=CC=CC=C1', 'CCN(C)C(C1=CC=C1Cl)=C(C)F', 'CCCCc1cccc(C#N)c1O', None, 'C=C1COC=CCN(C(C)=CC#CO)C1=C(Cl)C1CC1C#N', 'COc1c2c(C)cc3c1=C(C#N)C2(C)CC=CC=CC(Cl)=CC=3', None, 'ClC1CCC1', 'CCC(C)N=Cc1c#cccc1', 'COC1=CC(C)=CC=C(C#N)C=CC=CC=CC=CC=C1C#N', None, 'CCC(C)(C)CC', None, None, None, None, 'CC1=CC(C2=CN(C3(C)C=CC=CC=C(O)C=C3)C=CC=C2C)=N1', 'CCC(C#N)=C(C)C=CC=CC=C(C)C(C)C=CC#N', 'CCCOC1=C2C(N)=CC=C(Sc3ccc2[nH]3)C(C)=C1', None, 'CC=C1C2C3C=CC=CC2N1C=C3', None, 'COC#CC(=O)N1C(C)=C1C#N', None, 'COC1=CC2=CC=CC=CC=C(C=C1)C[SH]2C', None, None, 'Cc1ccc2c(c1)O2', None, 'COc1ccc(C2=CC=C2NC(N)=O)cc1', None, None, 'CC1=CC=C2CC(C)c3ccccc3C(C#CO)=CC=C12', None, 'CC=CC(C)=CC=COC1=CC=CC=CC(NC(N)=S)=C1', None, 'N#CC(Br)=CC=C1C(NC2CN2)=CCc2ccccc21', None, None, None, 'CC1=CC=C(C2=C3C=C(C3)C(=C(O)C#N)O2)C(C)=CC=C1CCN(C)CC#N', 'C=C(O)C1=CC=CC=CC1', 'CC1C#CCC(C(C)C(C)C(C)C)C1', None, 'CC#CC(C)=CC(C#N)=C(Br)C=CC=C(CC)CC', 'CCC1SCC(=CC=CC=CC#N)C1(C)N(C)O', 'CCC1CNc2cccc1c2', 'O=C(Nc1ccccccccc1)OC#[SH]', None, None, 'CCCC1=C(O)C=C1', None, 'N#CC=CC=CC=CC#CC=O', 'CCC(=CC1=CC=C1Br)CO', 'CCC(C)CC(=O)C(C#N)CC', 'CC=CN1CCN(CC=CC(C)=CC2=C(C=CCC)OC2)C1=S', 'Cc1c2ccc3nc(sc13)c(C)c1c#cc(ccc2O)n1C#N', 'CC1=C(C#N)NC(=S)N(C#N)CC1C', None, None, None, None, 'N#CC=CC1=CC=C2C=CC=CC=CC(=CC=C2)OCCO1', None, None, None, None, 'COC1=C(C#N)C=C1C(C)=S', None, None, 'C=CC=CC=C(F)C=CCCCC', None, None, 'N#CC1=CC=CC=CC2=CC=C(Cl)C=C1C(C#N)CCNC2', None, None, 'O=C1CCC#CCC1', None, 'ClC1=CC=CC2=CC=CC=CC=CC(=CC=C1)N2', None, None, 'CC(Cl)=CC#N', None, None, None, None, None, None, 'CC1=CC(N)=CC=CC=C1Br', 'C=CCCCC(O)CC', 'N#CCC(O)CC1=CCCC=C=CCC#CC=CC=C1', None, 'COCCOc1cc2ccccccc1cc2', None, 'O=C1CC2=CC(Br)=C3C#CC(F)=CC=CC=C2P3(=O)N1', 'CCCN1CC2=CC=C(OC)C(Cl)=C(C)C1=CC=CC=C2', 'CCCSC=C(C=CC=C(N)S)C(C#N)NC#[SH]', 'CCC1=CCC(C#N)=CC(OC)=CC=CC=CC=C1SC(=O)O', 'CCc1ccccc1', 'COP1(=S)SC(=CC2=CC=C2)S1', 'COC1(c2ccc(Cl)c(F)c2)CC1', None, 'CC1=CC=C(O)C(NCO)=CC=C(C=CCO)C1=O', None, 'CC(C#N)=CC=CSCCNC=Nc1cccc2cc(c(C)cc1)OCC2', None, 'CC#Cc1ccc2n1C(CCC#N)=C2', None, 'C=C1OC(=O)C1=CC1=CC=C1OC(C)=O', None, None, 'N#CC=C(Cl)C=CC=C(O)C#N', None, 'CN(C)C(N)=CC(Cl)=CC=C(F)CC1=CC=C1', 'CC1=CC=CC(Br)=CC(=C(C2=CC=C2O)C(C)C)NNN1', None, 'CC1C2=CC=C(C=CC=C3c4ccccc43)O[PH]#Cc3cc2ccc31', 'CC1CC(O)CC2=CC=C(C#N)C#CC=C2N1', None, None, None, 'COC1=CC=CC=CC=CC(C(C)C2(C)COCNC(=S)NC2C)=CC(C)=C1', None, 'CC1=CC2=CC=C(C=C1Cl)NC(=O)C2', 'ClC=C(Cl)C=CC=CC=CC#[PH]I', None, None, None, 'CC(C)C=CC1C(C)CC(C2=CC(O)=CC=CC=C(Br)C=CC=C2)CN2CCC1C2', None, None, 'CC=CC=C1C=C(C)C=CC(=CC=CC(=CC#P=O)CC)CCC1', 'N#Cc1c(F)ccc(O)c1Br', 'C1=CC=CC=CC=C1', 'CCCCC#CC=COc1ccc(C)cc1', None, None, None, None, None, 'CC1=C2C=NNC(O)(O)C(C=CC=CC=CI)=CC=CC2=C1', 'CC=C1OC2C3CC3C3CCC132', None, 'C=CC(O)=NC=C(C)c1ccccc1', 'Cc1ccccccc(N(C)C)cc(O)c#cncc2ccc1-2', None, 'C=CC(C=Nc1ccc(O)c(Cl)c1)=CC(Br)=CC=C(F)CI', 'CCC1OC2=CC=CC=CC=CC=CC=C(C=N)C=CC=CC=CCN21', None, None, None, None, None, None, None, None, 'C=CC(=C)OC', None, None, None, 'Fc1ccccccccc1', 'CCCCCC(=C(C)C)C(C)Br', 'CC(C)=CC=C1NC(=O)[SH](C)C(C#N)=CC=C1C1C#CC1', None, 'COc1cc(C(Br)=CCO)c(C)cc1C=NC1=CC=C1', 'CC(SC#N)=C(C=CC#N)Oc1cc2oc1-2', 'N#Cc1cccc2[nH]c-2cc1I', 'N#CC1=CC=CC=CC=C2C=c3ccc(c#c[nH]c2c3)=CC=CCC1', None, None, None, None, 'CC1C=c2c(ncc3ccccc23)=CC=CC=CC=CC1', 'CC=CCOCCCC1CC(C)(Br)C1CC#N', None, None, None, 'CCC1CC2=CC=c3ccc(cc3)=C(C=C(C)C=C2)OCC(NC#[SH])=N1', 'CC1=CC=C1c1ccc(Br)c(Cl)c1', None, 'O=C1NC2=C3C=CC#CC=CC=CC=CC=CC=C(S3)C(Cl)C12', None, None, None, None, None, 'CC1=CC=CC(Br)=CC=CC=CC=C1', None, None, None, 'C[SH]1CCC(CCCOc2ccccc2)C1', 'C=CC1C(=C)c2cccccc(NC=CC(=C)C)ccc21', None, None, None, None, None, None, None, None, None, 'CC(Br)=C(Cl)C=C(C=CC1=CN2CN(CCN1)CC2C1=CC=C1)OC(C)C', 'CC(C)=NNC=C1C=CC=Cc2ccccc(c2=S)C(=CC#N)C1', 'C#CCOC=O', 'C#CC=C(Br)C=C(C)C=CC', None, None, 'NC1=CC=CC=CC2=C1C=CSCCCS2', None, None, None, 'CCCCCSC(C)C1=CC(F)C(Cl)=C(O)C2=C1[SH]=C(O)C2', None, None, 'Nc1cccc2c(Cl)cccccc-2s1', 'CC=CC1=CC=C2C=C(C=C1)CCO2', 'CC(F)CC1=C[PH](=O)O1', 'CC=CCCCCCCC1CCN1CC=CC=C1C=CC=C(C)C=C1', None, 'C=C(C)C(=O)N(CC)Cc1cccc(C)c1', 'CN=C(N)C(C#N)=CC=C(C)C=C(C)Br', None, None, None, None, 'CC(C)C1=CC=CC2=C(N2)SC1=CC=CC=C1N=CC(ONC#N)=CC2=C1C(Cl)O2', 'CC=NNC(=N)N(CC)NC(=O)CC', 'CC#CCCC(=O)C1CCC1CCC1CCCC(=O)C1(C)CCCC', 'N#CN(C1=CC=C1)C1=C(Cl)C=CC=CC=C1', 'C#CC=C(NC(=S)Nc1ccccc1)C(C#N)=CC=C', None, 'CC(=O)C(C)c1ccc2c(c(C#N)ccc(O)c1)=CC=2', 'CCC1CC2CCCCC1C1=CC=C3C=CC=C1CN3CC2', 'CC(Br)C=CCOCCBr', None, None, 'CC(=O)NP(C)(=S)Nc1ccccc1', None, 'FC(=CC1=CC=C1)C(=CC=C1NC2C=CC=CC=C2O1)OCCCI', 'S=C1NCCC2=CC=C2O1', 'C#CC=CC=CC=CC(C)=C1OC1C', None, None, None, 'C=CC1=CC=C2C(O)=CC(=C1OC)N(CC)C(C)C(C)(CC)C2CCC=C(C)C=CC', None, None, 'COC1CSC2=CC=C3C=CC=CC2=CSC(=S)C(CCC1SC(N)=S)O3', None, None, None, 'CCOC=CC=C(C)C#N', None, 'CC=C1NC(O)CCCC2CCCNC(N2)c2ccc(Cl)cc21', None, None, None, None, None, None, 'CCC=CC(O)=CC=CCCCCCC', None, None, None, None, 'CC=C(NC=O)C(Cl)=CC=CC=CC#N', None, 'CC1C(=CC=CC#N)OC2=CC=CC=CC=C21', 'CC1CCCCO1', None, 'C#CC=C(C)C1=C(Br)C(=CC=CC=C(C)O)NC2CC(C)NC(=O)N12', None, 'CN1CCC2CNc3cccccc2c1cc3', None, None, 'CC(=O)OC(C)=CCCC1=CC=C2C=CC=C1O2', None, 'CN(C1=c2oc3cc2CC(C)(O)C1=CC=3)C(C)(C)c1cncs1', None, None, 'CC1=CC=C2OC3=CC=C2C=CC(=C3)NC#C1', 'CC1=CC(Cl)=CC=CC=CC2=CC(=CC=CC=C1Br)C(=O)N2', 'N#CC#CCC1(Cl)CCC1N1CCC1O', 'CC=Cc1cccc(OC)c1C(C)(O)OC', None, 'C=C(Cl)C=C1C=CC=NC=C(C(O)Br)N(O)C1', 'N#CC1=CC=CC=CC=C1', None, 'CC1=CC(=Cc2c#cc#cc2)C(CO)C(C)CCC1', None, 'COC(C#N)=CC=CC=CC=C(C)C(=CC#N)CC[PH]#[SH]', 'C=C(C)C=C1C=C1C=CCO', 'CC(C)C1=CC=C1', 'CNC(C)=CC(=CC=CC=C(C)C)NCBr', None, None, None, 'Fc1cccc2cc(I)cc3cnc=3cc1OCCO2', 'C=CCC12CCC1C2', 'C=CCCC(C#N)=CC(O)Cl', None, 'Cn1c(=O)sc2ccccccccc21', None, None, 'CC(C)=C1C(Cl)=C2C3=CC3=CC=C(C#CC1C)C(C)CC1(CO1)C[PH](=O)C2Br']
+All SMILES saved to CSV
+Validity over 500 molecules: 48.40%
+Number of connected components of 500 molecules: min:1.00 mean:1.72 max:6.00
+Relaxed validity over 500 molecules: 57.20%
+self.args.dataset: {'name': 'synth2', 'datadir': 'data/synth2/', 'remove_h': True, 'random_subset': None, 'pin_memory': False, 'compute_fcd': True, 'aromatic': False}
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+Invalid chemistry
+LOGP and num_atoms conditional generation Zinc
+Uniqueness over 286 valid molecules: 99.65%
+Novelty over 285 unique valid molecules: 100.00%
+RDKit new conds: {'oh_percentage': 29.752066731452942, 'nh2_percentage': 9.090909361839294, '=O_percentage': 20.247933268547058, 'pyr_percentage': 3.305784985423088}
+All smiles saved
+[None, None, None, 'C#CC(C)C#C', None, None, None, None, 'FC1=CC2=CC(Cl)=C3C=CCCC1=COC23', 'CCC1=C2C3=CC=CC(O)=C(CCO)C=C(C)N=C(N)C2N(CCC3)C1', 'CC1=CC(Cl)=C(C(=O)O)C1', 'N#CC1=CC=CC(Cl)=CO1', 'CCCCC=CF', 'CC(CCO)C(F)Cl', 'C=CC(O)=NCC(C)CNC', None, None, None, None, 'CC(C)SCPN=S', None, None, None, None, 'CC1=CC(C)=C(C#N)C=CC=C1', 'CON=CC(Cl)=C1C=CC=C2C=CC=NN=CC3=CC=C(F)C=C(C=C1)NC2=CC=C3', 'CC(C=N)=Cc1ccc(Cl)c(C)c1Cl', None, 'CC1CSC1=CC1=CC1', 'Cc1cc2ccc1C(C)(I)COC2=NCCC#N', 'C1=COC1', 'CC1CC(CC(C)OC=CC(O)Cl)C1', 'NN=Cc1nc2ccc1=2', None, 'COC(=CC(Br)=CC#CBr)C1=CC=C1C1=NN=C1NC#P', 'COC1=C(Br)C=C(C=CC=C2C=C2C#N)C2=CC=CC(=C1)N=C2C', 'N#CC1=C2C=Cc3c(C#N)c(cccccc1c3C1=CC=C1)C(=O)N2', None, None, None, 'CC=CCC(C)OC=O', 'C=CC=C(C)CC(CCC(C)Cl)C(CS)SC#N', 'C#CC(CC(C)O)C1=CC1C', 'C1=CCC=C(C2CCCC2)C=C1', None, None, None, None, None, 'CCC(C)=C1CCCCC=CCC1O', None, None, None, 'CC#CC=CC=C1C=CC=CC(SC)=CC=C1NC#N', None, 'CC=CC=CC=C(C#N)NC(N)=NC=COC', 'CC1(C)CC=NN=C(SC=CC=CC2=CC=CC=CC=C2Cl)C1', 'CC(C)CCC(C)C1CC=CC=CC1', 'C=CC=CC=C(C)C=Nc1ccc(CC(C)=CCNC(C)=CC=NC#N)cc1', 'CC1=CC=C2C=CC=C(C=CC(C)=C1N=C(C#N)C#N)C2', 'CC=C1CCC(C)(C)C1', 'C=CC1C(C#N)=CC=CC=CC2=CC=C(C)CN(C)C1=C2', None, 'CCC(=C(C)C)C(O)(P)Cl', None, 'CC1=CC=CC(=CC=CC=CN2CCNC2=S)C1', None, None, None, 'C=CC(C)=C1ON1C(C)C=CC=C1CC1', None, 'CCC1C(=CC#N)N(P(C)(=O)OC(=O)CC=CC=CSC)CC1C(C)C', 'COC(C)CCCCCC1=NC(=N)N1', 'C1=CC=CC=CC(C2C=NO2)=CC=CC=C1', 'C=CC=CC=CC=CC', None, 'CC=CC(C)C=C(C)NC(C1=CC=C1)C1=CC=C(F)C=CC=C1', None, 'N=CC1=CC=CC=C(Cl)C=C1', 'COCC(Cl)=CC=CC=C1C=CC=CC=N1', 'CCCOC(=O)NC(C)c1cc(C)ccc1C', None, 'CC(C)=C1CCCOC(C)CO1', None, None, None, 'Clc1ccc(N=CC2=CC=C2)cc1', 'CNc1ccccc1', None, None, None, 'N#CC1=CC(=CC=CC=C2CCC2)C1', 'O=C1OC1O', 'Clc1ccccc1Cl', None, None, None, 'Cc1ccc2cccc(C)c2c1', 'N#CSC(C#N)=C(F)C=CC=CC(F)(Cl)Br', None, None, None, 'c1ccc2csc(cc1)[SH]1OC1O2', None, 'CC=c1ccc2cc1ccc2CCCO', 'CC=C(C=CC=C(Cl)C=CBr)NCNP(=S)(OC)OC', 'CCCCCCC(=O)C1=CC=C2CC(C)(CC1C=C(C)CC)O2', 'CC(C#N)=CC=CC=CC#N', 'CCN1CCC2=CC=C(C=CC=CC=CC=C2)NC1=S', None, None, 'CC=CC=c1cc2oc1=C2C1(C)OP2CN2CC1CC', 'C#CN(C=C)C(N)=O', None, None, None, None, 'CC(C)=CC=CC1=c2ccccc([nH]c(=O)nc2)=CC=CC(Br)=C1O', 'Cc1ccc(C#CO)c(Cl)c1', 'CCC=COC1=CC=CC=CC=C1', 'CC1CCCN2CC(c3ccccc3)C3CCC(C)C(CC2=N3)C1', None, None, None, None, 'CC1(C=NO)Cc2cc3ccc4oc(cc(c-4cn2)C1N)C=CC=C3', 'C=CSC(=S)NN1CC1', 'C#CC=CC(C)C1CCCC=CC=C1C', None, None, None, 'O=C(NCCC1=C(Cl)CCCCCC=C1)OC1=CC=C1Cl', None, None, 'N#CC=C(C=O)C=CC=CC(F)F', 'C=CC(=CC1=CC(N2C(=O)CC2C)=C(C)C=CC=C1)C1=CC=C1Br', 'N#CC=COC(=S)NC(C=C(Br)C=C1CC1)=NCl', None, 'CCCCc1ccccccccc1C', None, None, None, None, 'C=C(Cl)C1=CC(CC(C)CC(O)F)=CC=CC=NCCS1', None, 'CC12CC3=CC=CC(=C1C=C3)OCC(N=CNC#N)C2', 'CC1CC(F)OCCC2C3=C(C=C(F)C4=CC=C4)C12C3', None, None, None, None, 'OC1=CC=CCC=C1', 'CC(C)OC1=C(C(C)Cl)C=C1', 'CC1C=CCC1', None, 'FC1=CC=Cc2ccc3c4c5cc([nH]2)[SH]2C6=COC2(CC(=C1)C=C4)C6=CC=c35', 'CC(C)CC(Cl)CC=CCNC(=O)c1ccccc1', None, None, 'C1=CCC2CC(=C1)CC1(C=CCC1)C2C=CC=C1C=CCO1', 'CC(N)Cc1cccc(NC#N)c1Br', None, None, 'CC=CC=C1C=C2C(=O)NN=CC12', None, None, 'C=CN(C=S)P(=O)=O', 'COCc1ccccc1', 'C=C1C(=CC=C(C)C)C2=CC=C=CC12', 'C=C(C(F)Br)C(C)(CC)CCC', None, None, None, 'CC=CCOCCC', 'CC=Cc1ccccc(C)ccc(CC=CCCBr)c1', None, None, 'C=C(C)C(O)=CC=CC=CC=C(O)CC', 'CCCC(C)CC1=CC=CC=CC=CC=CC=C1', 'C1#CC2=CC1=CC1=CC=C2C2=C3C=CC=CC(=C2)NCOCC2C1=CC2CC3', None, None, None, 'C=C(C)C1C(=O)C2=C(C)C=CC=C(C(CCCCC)=C2)N1C', 'N#CC1=CC=C1C(Cl)=CC(Cl)=CC1=CC=CC2=C(O)C3C(C1)C23', None, 'CC#CC(=CC=C(O)C#N)C(C#P)=CC(Cl)=CC=CC(Cl)=CC=C(O)C#N', 'Cc1cc2c(F)ccc3c(c-2c1)N(C)C3=O', None, 'N#CC1=CC2=CC=C(C=C1)OCCC2', 'C=CC(COC)CC1=CC(O)=C(Cl)C(P)=CC=C1Cl', None, None, 'CCCC(CC=CC=C(C)C#N)CC(=S)c1ccc2cccc(CCC#N)c2c1', None, 'C1=CC=CC=CC=C1', 'CCN(C)C(C1=CC=C1Cl)=C(C)F', 'CCCCc1cccc(C#N)c1O', None, 'C=C1COC=CCN(C(C)=CC#CO)C1=C(Cl)C1CC1C#N', 'COc1c2c(C)cc3c1=C(C#N)C2(C)CC=CC=CC(Cl)=CC=3', None, 'ClC1CCC1', 'CCC(C)N=Cc1c#cccc1', 'COC1=CC(C)=CC=C(C#N)C=CC=CC=CC=CC=C1C#N', None, 'CCC(C)(C)CC', None, None, None, None, 'CC1=CC(C2=CN(C3(C)C=CC=CC=C(O)C=C3)C=CC=C2C)=N1', 'CCC(C#N)=C(C)C=CC=CC=C(C)C(C)C=CC#N', 'CCCOC1=C2C(N)=CC=C(Sc3ccc2[nH]3)C(C)=C1', None, 'CC=C1C2C3C=CC=CC2N1C=C3', None, 'COC#CC(=O)N1C(C)=C1C#N', None, 'COC1=CC2=CC=CC=CC=C(C=C1)C[SH]2C', None, None, 'Cc1ccc2c(c1)O2', None, 'COc1ccc(C2=CC=C2NC(N)=O)cc1', None, None, 'CC1=CC=C2CC(C)c3ccccc3C(C#CO)=CC=C12', None, 'CC=CC(C)=CC=COC1=CC=CC=CC(NC(N)=S)=C1', None, 'N#CC(Br)=CC=C1C(NC2CN2)=CCc2ccccc21', None, None, None, 'CC1=CC=C(C2=C3C=C(C3)C(=C(O)C#N)O2)C(C)=CC=C1CCN(C)CC#N', 'C=C(O)C1=CC=CC=CC1', 'CC1C#CCC(C(C)C(C)C(C)C)C1', None, 'CC#CC(C)=CC(C#N)=C(Br)C=CC=C(CC)CC', 'CCC1SCC(=CC=CC=CC#N)C1(C)N(C)O', 'CCC1CNc2cccc1c2', 'O=C(Nc1ccccccccc1)OC#[SH]', None, None, 'CCCC1=C(O)C=C1', None, 'N#CC=CC=CC=CC#CC=O', 'CCC(=CC1=CC=C1Br)CO', 'CCC(C)CC(=O)C(C#N)CC', 'CC=CN1CCN(CC=CC(C)=CC2=C(C=CCC)OC2)C1=S', 'Cc1c2ccc3nc(sc13)c(C)c1c#cc(ccc2O)n1C#N', 'CC1=C(C#N)NC(=S)N(C#N)CC1C', None, None, None, None, 'N#CC=CC1=CC=C2C=CC=CC=CC(=CC=C2)OCCO1', None, None, None, None, 'COC1=C(C#N)C=C1C(C)=S', None, None, 'C=CC=CC=C(F)C=CCCCC', None, None, 'N#CC1=CC=CC=CC2=CC=C(Cl)C=C1C(C#N)CCNC2', None, None, 'O=C1CCC#CCC1', None, 'ClC1=CC=CC2=CC=CC=CC=CC(=CC=C1)N2', None, None, 'CC(Cl)=CC#N', None, None, None, None, None, None, 'CC1=CC(N)=CC=CC=C1Br', 'C=CCCCC(O)CC', 'N#CCC(O)CC1=CCCC=C=CCC#CC=CC=C1', None, 'COCCOc1cc2ccccccc1cc2', None, 'O=C1CC2=CC(Br)=C3C#CC(F)=CC=CC=C2P3(=O)N1', 'CCCN1CC2=CC=C(OC)C(Cl)=C(C)C1=CC=CC=C2', 'CCCSC=C(C=CC=C(N)S)C(C#N)NC#[SH]', 'CCC1=CCC(C#N)=CC(OC)=CC=CC=CC=C1SC(=O)O', 'CCc1ccccc1', 'COP1(=S)SC(=CC2=CC=C2)S1', 'COC1(c2ccc(Cl)c(F)c2)CC1', None, 'CC1=CC=C(O)C(NCO)=CC=C(C=CCO)C1=O', None, 'CC(C#N)=CC=CSCCNC=Nc1cccc2cc(c(C)cc1)OCC2', None, 'CC#Cc1ccc2n1C(CCC#N)=C2', None, 'C=C1OC(=O)C1=CC1=CC=C1OC(C)=O', None, None, 'N#CC=C(Cl)C=CC=C(O)C#N', None, 'CN(C)C(N)=CC(Cl)=CC=C(F)CC1=CC=C1', 'CC1=CC=CC(Br)=CC(=C(C2=CC=C2O)C(C)C)NNN1', None, 'CC1C2=CC=C(C=CC=C3c4ccccc43)O[PH]#Cc3cc2ccc31', 'CC1CC(O)CC2=CC=C(C#N)C#CC=C2N1', None, None, None, 'COC1=CC=CC=CC=CC(C(C)C2(C)COCNC(=S)NC2C)=CC(C)=C1', None, 'CC1=CC2=CC=C(C=C1Cl)NC(=O)C2', 'ClC=C(Cl)C=CC=CC=CC#[PH]I', None, None, None, 'CC(C)C=CC1C(C)CC(C2=CC(O)=CC=CC=C(Br)C=CC=C2)CN2CCC1C2', None, None, 'CC=CC=C1C=C(C)C=CC(=CC=CC(=CC#P=O)CC)CCC1', 'N#Cc1c(F)ccc(O)c1Br', 'C1=CC=CC=CC=C1', 'CCCCC#CC=COc1ccc(C)cc1', None, None, None, None, None, 'CC1=C2C=NNC(O)(O)C(C=CC=CC=CI)=CC=CC2=C1', 'CC=C1OC2C3CC3C3CCC132', None, 'C=CC(O)=NC=C(C)c1ccccc1', 'Cc1ccccccc(N(C)C)cc(O)c#cncc2ccc1-2', None, 'C=CC(C=Nc1ccc(O)c(Cl)c1)=CC(Br)=CC=C(F)CI', 'CCC1OC2=CC=CC=CC=CC=CC=C(C=N)C=CC=CC=CCN21', None, None, None, None, None, None, None, None, 'C=CC(=C)OC', None, None, None, 'Fc1ccccccccc1', 'CCCCCC(=C(C)C)C(C)Br', 'CC(C)=CC=C1NC(=O)[SH](C)C(C#N)=CC=C1C1C#CC1', None, 'COc1cc(C(Br)=CCO)c(C)cc1C=NC1=CC=C1', 'CC(SC#N)=C(C=CC#N)Oc1cc2oc1-2', 'N#Cc1cccc2[nH]c-2cc1I', 'N#CC1=CC=CC=CC=C2C=c3ccc(c#c[nH]c2c3)=CC=CCC1', None, None, None, None, 'CC1C=c2c(ncc3ccccc23)=CC=CC=CC=CC1', 'CC=CCOCCCC1CC(C)(Br)C1CC#N', None, None, None, 'CCC1CC2=CC=c3ccc(cc3)=C(C=C(C)C=C2)OCC(NC#[SH])=N1', 'CC1=CC=C1c1ccc(Br)c(Cl)c1', None, 'O=C1NC2=C3C=CC#CC=CC=CC=CC=CC=C(S3)C(Cl)C12', None, None, None, None, None, 'CC1=CC=CC(Br)=CC=CC=CC=C1', None, None, None, 'C[SH]1CCC(CCCOc2ccccc2)C1', 'C=CC1C(=C)c2cccccc(NC=CC(=C)C)ccc21', None, None, None, None, None, None, None, None, None, 'CC(Br)=C(Cl)C=C(C=CC1=CN2CN(CCN1)CC2C1=CC=C1)OC(C)C', 'CC(C)=NNC=C1C=CC=Cc2ccccc(c2=S)C(=CC#N)C1', 'C#CCOC=O', 'C#CC=C(Br)C=C(C)C=CC', None, None, 'NC1=CC=CC=CC2=C1C=CSCCCS2', None, None, None, 'CCCCCSC(C)C1=CC(F)C(Cl)=C(O)C2=C1[SH]=C(O)C2', None, None, 'Nc1cccc2c(Cl)cccccc-2s1', 'CC=CC1=CC=C2C=C(C=C1)CCO2', 'CC(F)CC1=C[PH](=O)O1', 'CC=CCCCCCCC1CCN1CC=CC=C1C=CC=C(C)C=C1', None, 'C=C(C)C(=O)N(CC)Cc1cccc(C)c1', 'CN=C(N)C(C#N)=CC=C(C)C=C(C)Br', None, None, None, None, 'CC(C)C1=CC=CC2=C(N2)SC1=CC=CC=C1N=CC(ONC#N)=CC2=C1C(Cl)O2', 'CC=NNC(=N)N(CC)NC(=O)CC', 'CC#CCCC(=O)C1CCC1CCC1CCCC(=O)C1(C)CCCC', 'N#CN(C1=CC=C1)C1=C(Cl)C=CC=CC=C1', 'C#CC=C(NC(=S)Nc1ccccc1)C(C#N)=CC=C', None, 'CC(=O)C(C)c1ccc2c(c(C#N)ccc(O)c1)=CC=2', 'CCC1CC2CCCCC1C1=CC=C3C=CC=C1CN3CC2', 'CC(Br)C=CCOCCBr', None, None, 'CC(=O)NP(C)(=S)Nc1ccccc1', None, 'FC(=CC1=CC=C1)C(=CC=C1NC2C=CC=CC=C2O1)OCCCI', 'S=C1NCCC2=CC=C2O1', 'C#CC=CC=CC=CC(C)=C1OC1C', None, None, None, 'C=CC1=CC=C2C(O)=CC(=C1OC)N(CC)C(C)C(C)(CC)C2CCC=C(C)C=CC', None, None, 'COC1CSC2=CC=C3C=CC=CC2=CSC(=S)C(CCC1SC(N)=S)O3', None, None, None, 'CCOC=CC=C(C)C#N', None, 'CC=C1NC(O)CCCC2CCCNC(N2)c2ccc(Cl)cc21', None, None, None, None, None, None, 'CCC=CC(O)=CC=CCCCCCC', None, None, None, None, 'CC=C(NC=O)C(Cl)=CC=CC=CC#N', None, 'CC1C(=CC=CC#N)OC2=CC=CC=CC=C21', 'CC1CCCCO1', None, 'C#CC=C(C)C1=C(Br)C(=CC=CC=C(C)O)NC2CC(C)NC(=O)N12', None, 'CN1CCC2CNc3cccccc2c1cc3', None, None, 'CC(=O)OC(C)=CCCC1=CC=C2C=CC=C1O2', None, 'CN(C1=c2oc3cc2CC(C)(O)C1=CC=3)C(C)(C)c1cncs1', None, None, 'CC1=CC=C2OC3=CC=C2C=CC(=C3)NC#C1', 'CC1=CC(Cl)=CC=CC=CC2=CC(=CC=CC=C1Br)C(=O)N2', 'N#CC#CCC1(Cl)CCC1N1CCC1O', 'CC=Cc1cccc(OC)c1C(C)(O)OC', None, 'C=C(Cl)C=C1C=CC=NC=C(C(O)Br)N(O)C1', 'N#CC1=CC=CC=CC=C1', None, 'CC1=CC(=Cc2c#cc#cc2)C(CO)C(C)CCC1', None, 'COC(C#N)=CC=CC=CC=C(C)C(=CC#N)CC[PH]#[SH]', 'C=C(C)C=C1C=C1C=CCO', 'CC(C)C1=CC=C1', 'CNC(C)=CC(=CC=CC=C(C)C)NCBr', None, None, None, 'Fc1cccc2cc(I)cc3cnc=3cc1OCCO2', 'C=CCC12CCC1C2', 'C=CCCC(C#N)=CC(O)Cl', None, 'Cn1c(=O)sc2ccccccccc21', None, None, 'CC(C)=C1C(Cl)=C2C3=CC3=CC=C(C#CC1C)C(C)CC1(CO1)C[PH](=O)C2Br']
+All SMILES saved to CSV
+FCD computation is disabled. Skipping.
+fcd -1
+Starting custom metrics
+Computing ratios of metrics:  []
+WARNING: No reference metrics for ratio computation.
+Custom metrics computed.
+Stability metrics: {'mol_stable': -1, 'atm_stable': -1} -- [0.484, 0.572, 0.9965034965034965, 1.0]
+Finished testing.
+Testing ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 6/6 0:00:00 • 0:00:00 511.22it/s 
+[1;34mwandb[0m: 
+[1;34mwandb[0m: You can sync this run to the cloud by running:
+[1;34mwandb[0m: [1mwandb sync /hkfs/work/workspace_haic/scratch/rx3495-workspace_C/outputs/2026-05-04/11-58-28-onza-synth2-synth/wandb/offline-run-20260504_115833-bouxg5u4[0m
+[1;34mwandb[0m: Find logs at: [1;35mwandb/offline-run-20260504_115833-bouxg5u4/logs[0m
+
+============================= JOB FEEDBACK =============================
+
+Job ID: 1641751
+Cluster: haic
+User/Group: rx3495/iti
+Account: iti
+State: COMPLETED (exit code 0)
+Partition: normal
+Nodes: 1
+Cores per node: 8
+Nodelist: haicn1708
+CPU Utilized: 00:15:37
+CPU Efficiency: 12.16% of 02:08:24 core-walltime
+Job Wall-clock time: 00:16:03
+Starttime: Mon May  4 11:57:59 2026
+Endtime: Mon May  4 12:14:02 2026
+Memory Utilized: 1.56 GB
+Memory Efficiency: 2.43% of 64.00 GB (64.00 GB/node)
+Energy Consumed: 742873 Joule / 206.353611111111 Watthours
+Average node power draw: 771.415368639668 Watt
